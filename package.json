@@ -1,0 +1,19 @@
+{
+  "name": "vanguard-estadisticas-pagos",
+  "version": "1.0.0",
+  "description": "Sistema de Estadísticas de Pagos de Pensiones - Vanguard Schools",
+  "main": "backend/server.js",
+  "scripts": {
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && npm start"
+  },
+  "keywords": ["estadisticas", "pagos", "pensiones", "colegio", "vanguard"],
+  "author": "Vanguard Schools",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

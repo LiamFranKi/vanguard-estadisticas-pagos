@@ -1,0 +1,466 @@
+/* =====================================================
+   NAVBAR RESPONSIVE - VANGUARD ESTADÍSTICAS
+   ===================================================== */
+
+.navbar {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--glass-border);
+  padding: 16px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: var(--transition);
+}
+
+.navbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* =====================================================
+   BRAND Y LOGO
+   ===================================================== */
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.navbar-brand:hover {
+  transform: scale(1.02);
+}
+
+.navbar-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.2rem;
+  box-shadow: var(--shadow-light);
+}
+
+.navbar-brand-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =====================================================
+   NAVEGACIÓN PRINCIPAL
+   ===================================================== */
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-link {
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: var(--transition);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.navbar-link:hover,
+.navbar-link.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+/* =====================================================
+   INFORMACIÓN DEL USUARIO
+   ===================================================== */
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navbar-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar-user-mobile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navbar-user-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.navbar-user-role {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  background: var(--glass-bg);
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--glass-border);
+}
+
+/* =====================================================
+   BOTÓN TOGGLE MÓVIL
+   ===================================================== */
+
+.navbar-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: var(--transition);
+}
+
+.navbar-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* =====================================================
+   MENÚ MÓVIL
+   ===================================================== */
+
+.navbar-mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.navbar-mobile-content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100%;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border-left: 1px solid var(--glass-border);
+  padding: 20px;
+  overflow-y: auto;
+  animation: slideInRight 0.3s ease-out;
+}
+
+.navbar-mobile-section {
+  margin-bottom: 24px;
+}
+
+.navbar-mobile-section h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.navbar-mobile-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  color: var(--text-primary);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: var(--transition);
+  margin-bottom: 4px;
+}
+
+.navbar-mobile-link:hover,
+.navbar-mobile-link.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--primary-color);
+}
+
+.navbar-mobile-icon {
+  font-size: 1.2rem;
+  width: 24px;
+  text-align: center;
+}
+
+.navbar-mobile-user {
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid var(--glass-border);
+}
+
+.navbar-mobile-user-info h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.navbar-mobile-user-info p {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+/* =====================================================
+   RESPONSIVE BREAKPOINTS
+   ===================================================== */
+
+/* Móviles pequeños (320px - 480px) */
+@media (max-width: 480px) {
+  .navbar-content {
+    padding: 0 12px;
+  }
+  
+  .navbar-brand-text {
+    font-size: 1rem;
+    max-width: 120px;
+  }
+  
+  .navbar-logo {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+  
+  .navbar-user-name {
+    font-size: 0.8rem;
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .navbar-toggle {
+    display: block;
+    font-size: 1.3rem;
+  }
+  
+  .navbar-mobile-content {
+    width: 100%;
+    padding: 16px;
+  }
+}
+
+/* Móviles grandes (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .navbar-nav {
+    display: none;
+  }
+  
+  .navbar-toggle {
+    display: block;
+  }
+  
+  .navbar-brand-text {
+    font-size: 1.1rem;
+  }
+  
+  .navbar-user-name {
+    font-size: 0.85rem;
+  }
+}
+
+/* Tablets (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .navbar-nav {
+    gap: 16px;
+  }
+  
+  .navbar-link {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .navbar-brand-text {
+    font-size: 1.1rem;
+  }
+  
+  .navbar-user-info {
+    gap: 8px;
+  }
+  
+  .navbar-user-name {
+    font-size: 0.9rem;
+  }
+  
+  .navbar-user-role {
+    font-size: 0.75rem;
+    padding: 3px 6px;
+  }
+}
+
+/* Escritorio pequeño (1025px - 1200px) */
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .navbar-content {
+    max-width: 1000px;
+  }
+  
+  .navbar-nav {
+    gap: 20px;
+  }
+}
+
+/* Escritorio grande (1201px+) */
+@media (min-width: 1201px) {
+  .navbar-content {
+    max-width: 1200px;
+  }
+}
+
+/* =====================================================
+   ANIMACIONES
+   ===================================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* =====================================================
+   ESTADOS ESPECIALES
+   ===================================================== */
+
+.navbar.scrolled {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+}
+
+.navbar-mobile-menu.closing {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+.navbar-mobile-content.closing {
+  animation: slideOutRight 0.3s ease-out forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* =====================================================
+   ACCESIBILIDAD
+   ===================================================== */
+
+.navbar-link:focus,
+.navbar-toggle:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.navbar-mobile-link:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* =====================================================
+   DARK MODE SUPPORT (FUTURO)
+   ===================================================== */
+
+@media (prefers-color-scheme: dark) {
+  .navbar {
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .navbar-mobile-content {
+    background: rgba(0, 0, 0, 0.3);
+    border-left-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* =====================================================
+   UTILIDADES RESPONSIVE
+   ===================================================== */
+
+.d-mobile-none {
+  display: none;
+}
+
+.d-tablet-none {
+  display: none;
+}
+
+.d-desktop-none {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .d-mobile-none {
+    display: block;
+  }
+}
+
+@media (min-width: 1025px) {
+  .d-tablet-none {
+    display: block;
+  }
+}
+
+@media (max-width: 1024px) {
+  .d-desktop-none {
+    display: block;
+  }
+}
