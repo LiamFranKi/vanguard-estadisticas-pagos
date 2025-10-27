@@ -3,12 +3,14 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 import { Bar, Doughnut } from 'react-chartjs-2';
 import axios from 'axios';
 import moment from 'moment';
+import { useAño } from '../contexts/AñoContext';
 import './Dashboard.css';
 
 // Registrar componentes de Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
 const Dashboard = () => {
+  const { añoActual, cambiarAño, obtenerAñosParaSelect } = useAño();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -37,15 +39,15 @@ const Dashboard = () => {
     return () => clearInterval(timeInterval);
   }, []);
 
-  // Cargar estadísticas
+  // Cargar estadísticas cuando cambia el año
   useEffect(() => {
     fetchDashboardStats();
-  }, []);
+  }, [añoActual]);
 
   const fetchDashboardStats = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/estadisticas/dashboard');
+      const response = await axios.get(`/api/estadisticas/dashboard?año=${añoActual}`);
       setStats(response.data);
     } catch (error) {
       console.error('Error al cargar estadísticas:', error);
@@ -160,7 +162,20 @@ const Dashboard = () => {
         <div className="dashboard-header">
           <div className="dashboard-title">
             <h1>📊 Dashboard de Estadísticas</h1>
-            <p>Resumen ejecutivo de pagos y deudas</p>
+            <p>Resumen ejecutivo de pagos y deudas - Año Académico {añoActual}</p>
+            <div className="año-selector">
+              <label htmlFor="año-select">Año Académico:</label>
+              <select 
+                id="año-select" 
+                value={añoActual} 
+                onChange={(e) => cambiarAño(parseInt(e.target.value))}
+                className="select-año"
+              >
+                {obtenerAñosParaSelect().map(año => (
+                  <option key={año} value={año}>{año}</option>
+                ))}
+              </select>
+            </div>
           </div>
           
           <div className="dashboard-time">

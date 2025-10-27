@@ -57,6 +57,12 @@ app.use('/api/deudas', deudasRoutes);
 app.use('/api/estadisticas', estadisticasRoutes);
 app.use('/api/archivos', archivosRoutes);
 
+// Importar rutas de años académicos
+const añosRoutes = require('./routes/años.routes');
+
+// Rutas de años académicos
+app.use('/api/años', añosRoutes);
+
 // Ruta de salud
 app.get('/api/health', (req, res) => {
   res.json({
@@ -79,6 +85,7 @@ app.get('/', (req, res) => {
       deudas: '/api/deudas',
       estadisticas: '/api/estadisticas',
       archivos: '/api/archivos',
+      años: '/api/años',
       health: '/api/health'
     }
   });

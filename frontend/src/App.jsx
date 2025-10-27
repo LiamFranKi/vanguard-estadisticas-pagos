@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { ConfigProvider } from './contexts/ConfigContext';
+import { AñoProvider } from './contexts/AñoContext';
 
 // Componentes
 import Navbar from './components/Navbar';
@@ -20,7 +21,8 @@ function App() {
   return (
     <AuthProvider>
       <ConfigProvider>
-        <Router>
+        <AñoProvider>
+          <Router>
           <div className="App">
             <Routes>
               {/* Ruta de login */}
@@ -45,7 +47,8 @@ function App() {
               } />
             </Routes>
           </div>
-        </Router>
+          </Router>
+        </AñoProvider>
       </ConfigProvider>
     </AuthProvider>
   );

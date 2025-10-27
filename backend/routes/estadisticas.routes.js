@@ -9,7 +9,8 @@ const { query } = require('../utils/database');
  */
 router.get('/dashboard', async (req, res) => {
   try {
-    const año = req.query.año || 2024;
+    // Si no se especifica el año, usar el año actual
+    const año = req.query.año || new Date().getFullYear();
 
     // Resumen general
     const resumenResult = await query(`

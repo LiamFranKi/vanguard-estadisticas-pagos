@@ -51,7 +51,23 @@ router.post('/upload', upload.single('archivo'), async (req, res) => {
       });
     }
 
-    const { tipo, año = 2024 } = req.body;
+    const { tipo, año } = req.body;
+    
+    // Validar que el año sea proporcionado
+    if (!año) {
+      return res.status(400).json({
+        success: false,
+        message: 'El año académico es requerido'
+      });
+    }
+    
+    const añoInt = parseInt(año);
+    if (isNaN(añoInt) || añoInt < 2020 || añoInt > 2030) {
+      return res.status(400).json({
+        success: false,
+        message: 'Año académico inválido'
+      });
+    }
     const filePath = req.file.path;
     const fileExtension = path.extname(req.file.filename).toLowerCase();
 
@@ -64,7 +80,7 @@ router.post('/upload', upload.single('archivo'), async (req, res) => {
       resultado = await excelProcessor.procesarExcelPagos(
         filePath,
         1, // usuarioId (temporal)
-        parseInt(año)
+        añoInt
       );
     } else if (fileExtension === '.pdf') {
       // Procesar PDF
@@ -72,7 +88,7 @@ router.post('/upload', upload.single('archivo'), async (req, res) => {
       resultado = await pdfProcessor.procesarPDFDeudores(
         filePath,
         1, // usuarioId (temporal)
-        parseInt(año)
+        añoInt
       );
     } else {
       // Eliminar archivo

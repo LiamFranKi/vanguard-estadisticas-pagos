@@ -14,11 +14,14 @@ router.get('/', async (req, res) => {
       grado = '', 
       page = 1, 
       limit = 50,
-      año = 2024 
+      año 
     } = req.query;
+    
+    // Si no se especifica el año, usar el año actual
+    const añoFiltro = año || new Date().getFullYear();
 
     let whereClause = 'WHERE a.año_academico = $1';
-    const params = [año];
+    const params = [añoFiltro];
     let paramIndex = 2;
 
     // Búsqueda por nombre o DNI
@@ -41,13 +44,13 @@ router.get('/', async (req, res) => {
     const alumnosResult = await query(`
       SELECT 
         a.id, a.dni, a.nombres, a.apellidos, a.grado_id, a.seccion, 
-        a.activo, a.created_at, a.updated_at,
+        a.activo, a.created_at, a.updated_at, a.año_academico,
         g.nombre as grado_nombre, g.nivel,
         COUNT(p.id) as total_pagos,
         COALESCE(SUM(p.monto), 0) as total_pagado
       FROM alumnos a
       LEFT JOIN grados g ON a.grado_id = g.id
-      LEFT JOIN pagos p ON a.id = p.alumno_id AND p.año_academico = $1
+      LEFT JOIN pagos p ON a.id = p.alumno_id AND p.año_academico = a.año_academico
       ${whereClause}
       GROUP BY a.id, g.nombre, g.nivel
       ORDER BY a.apellidos, a.nombres
