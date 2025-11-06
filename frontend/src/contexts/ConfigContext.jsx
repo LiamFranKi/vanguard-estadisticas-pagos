@@ -22,15 +22,27 @@ export const ConfigProvider = ({ children }) => {
   const fetchConfig = async () => {
     try {
       const response = await axios.get('/api/config');
-      setConfig(response.data);
+      const data = response.data?.data || response.data;
+      setConfig(data);
+      // Propagar colores a variables CSS globales
+      if (data?.color_primario) {
+        document.documentElement.style.setProperty('--primary-color', data.color_primario);
+      }
+      if (data?.color_secundario) {
+        document.documentElement.style.setProperty('--secondary-color', data.color_secundario);
+      }
     } catch (error) {
       console.error('Error cargando configuración:', error);
       // Configuración por defecto si falla
       setConfig({
         nombre_sistema: 'Vanguard Estadísticas Pagos',
+        descripcion_sistema: 'Sistema de gestión de pagos de pensiones',
+        logo: null,
         color_primario: '#1976d2',
-        color_secundario: '#7c4dff'
+        color_secundario: '#764ba2'
       });
+      document.documentElement.style.setProperty('--primary-color', '#1976d2');
+      document.documentElement.style.setProperty('--secondary-color', '#764ba2');
     } finally {
       setLoading(false);
     }
@@ -39,7 +51,10 @@ export const ConfigProvider = ({ children }) => {
   const updateConfig = async (newConfig) => {
     try {
       const response = await axios.put('/api/config', newConfig);
-      setConfig(response.data);
+      const data = response.data?.data || response.data;
+      setConfig(data);
+      if (data?.color_primario) document.documentElement.style.setProperty('--primary-color', data.color_primario);
+      if (data?.color_secundario) document.documentElement.style.setProperty('--secondary-color', data.color_secundario);
       return { success: true };
     } catch (error) {
       console.error('Error actualizando configuración:', error);

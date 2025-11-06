@@ -1,0 +1,24 @@
+{
+  "name": "Vanguard Estadísticas Pagos",
+  "short_name": "Vanguard Stats",
+  "description": "Sistema de estadísticas de pagos de pensiones para Vanguard Schools",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1976d2",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "business"],
+  "lang": "es",
+  "dir": "ltr"
+}
+
+
+

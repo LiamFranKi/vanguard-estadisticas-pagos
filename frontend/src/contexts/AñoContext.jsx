@@ -22,48 +22,48 @@ export const AñoProvider = ({ children }) => {
 
   const cargarAñosDisponibles = async () => {
     try {
-      const response = await axios.get('/api/años/disponibles');
-      const años = response.data.data;
-      
+      // Obtener años creados manualmente (activos)
+      const response = await axios.get('/api/anios');
+      const rows = response.data?.data || [];
+      const años = rows.map(r => r.año).sort((a,b)=>b-a);
       setAñosDisponibles(años);
-      
-      // Si no hay años disponibles o el año actual no está en la lista,
-      // usar el año actual del sistema
-      if (!años.includes(añoActual)) {
-        setAñoActual(new Date().getFullYear());
+      // Si el año actual no está en la lista, no lo forzamos; el usuario agregará uno manualmente
+      if (años.length > 0 && !años.includes(añoActual)) {
+        setAñoActual(años[0]);
       }
     } catch (error) {
       console.error('Error cargando años:', error);
-      setAñosDisponibles([new Date().getFullYear()]);
+      setAñosDisponibles([]);
     } finally {
       setLoading(false);
     }
   };
 
   const cambiarAño = (nuevoAño) => {
+    // Solo permitir años creados manualmente
     if (añosDisponibles.includes(nuevoAño)) {
       setAñoActual(nuevoAño);
     }
   };
 
   const obtenerAñosParaSelect = () => {
-    // Si no hay años con datos, retornar solo el año actual
-    if (añosDisponibles.length === 0) {
-      return [new Date().getFullYear()];
-    }
-    
-    // Generar lista de años (actual y anteriores)
-    const añoActual = new Date().getFullYear();
-    const años = [];
-    
-    // Agregar año actual y años anteriores que tengan datos
-    for (let año = añoActual; año >= 2020; año--) {
-      if (añosDisponibles.includes(año)) {
-        años.push(año);
-      }
-    }
-    
-    return años;
+    // Mostrar únicamente los años creados manualmente
+    return añosDisponibles;
+  };
+
+  const crearAño = async (nuevoAño, extra = {}) => {
+    const añoInt = parseInt(nuevoAño);
+    await axios.post('/api/anios', { año: añoInt, ...extra });
+    await cargarAñosDisponibles();
+    setAñoActual(añoInt);
+  };
+
+  const eliminarAño = async (año) => {
+    const añoInt = parseInt(año);
+    await axios.delete(`/api/anios/${añoInt}`);
+    await cargarAñosDisponibles();
+    // Si el año eliminado era el actual, mover al más reciente disponible
+    setAñoActual(prev => (prev === añoInt ? (añosDisponibles[0] || new Date().getFullYear()) : prev));
   };
 
   const value = {
@@ -71,6 +71,8 @@ export const AñoProvider = ({ children }) => {
     añosDisponibles,
     cambiarAño,
     obtenerAñosParaSelect,
+    crearAño,
+    eliminarAño,
     loading
   };
 
@@ -82,4 +84,14 @@ export const AñoProvider = ({ children }) => {
 };
 
 export default AñoContext;
+
+
+
+
+
+
+
+
+
+
 

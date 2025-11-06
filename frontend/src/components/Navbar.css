@@ -110,6 +110,25 @@
   gap: 12px;
 }
 
+/* Logout icon large and clean */
+.navbar-logout-icon {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.35rem;
+  line-height: 1;
+  padding: 6px;
+  border-radius: 8px;
+  color: var(--text-primary);
+  transition: var(--transition);
+}
+
+.navbar-logout-icon:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--danger-color);
+  transform: translateY(-1px);
+}
+
 .navbar-user-mobile {
   display: flex;
   align-items: center;

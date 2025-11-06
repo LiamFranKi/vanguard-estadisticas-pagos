@@ -47,14 +47,16 @@ const Navbar = () => {
   // Menú de navegación
   const menuItems = [
     { path: '/dashboard', label: 'Dashboard', icon: '📊', mobileIcon: '📊' },
-    { path: '/estadisticas', label: 'Estadísticas', icon: '📈', mobileIcon: '📈' },
-    { path: '/archivos', label: 'Archivos', icon: '📁', mobileIcon: '📁' },
-    { path: '/alumnos', label: 'Alumnos', icon: '👥', mobileIcon: '👥' },
-    { path: '/reportes', label: 'Reportes', icon: '📋', mobileIcon: '📋' }
+    // { path: '/estadisticas', label: 'Estadísticas', icon: '📈', mobileIcon: '📈' },
+    // { path: '/archivos', label: 'Archivos', icon: '📁', mobileIcon: '📁' },
+    // { path: '/alumnos', label: 'Alumnos', icon: '👥', mobileIcon: '👥' },
+    // { path: '/reportes', label: 'Reportes', icon: '📋', mobileIcon: '📋' }
   ];
 
   // Menú de administrador
   const adminItems = [
+    { path: '/archivos', label: 'Archivos', icon: '📁', mobileIcon: '📁' },
+    { path: '/usuarios', label: 'Usuarios', icon: '👥', mobileIcon: '👥' },
     { path: '/configuracion', label: 'Configuración', icon: '⚙️', mobileIcon: '⚙️' }
   ];
 
@@ -88,28 +90,16 @@ const Navbar = () => {
             {/* Menú de administrador */}
             {user?.rol === 'Administrador' && (
               <>
-                {isTablet ? (
-                  <li>
+                {adminItems.map((item) => (
+                  <li key={item.path}>
                     <Link
-                      to="/configuracion"
-                      className={`navbar-link ${location.pathname === '/configuracion' ? 'active' : ''}`}
-                      title="Configuración"
+                      to={item.path}
+                      className={`navbar-link ${location.pathname === item.path ? 'active' : ''}`}
                     >
-                      ⚙️
+                      {isTablet ? item.mobileIcon : item.label}
                     </Link>
                   </li>
-                ) : (
-                  adminItems.map((item) => (
-                    <li key={item.path}>
-                      <Link
-                        to={item.path}
-                        className={`navbar-link ${location.pathname === item.path ? 'active' : ''}`}
-                      >
-                        {item.label}
-                      </Link>
-                    </li>
-                  ))
-                )}
+                ))}
               </>
             )}
           </ul>
@@ -131,18 +121,23 @@ const Navbar = () => {
               </button>
             </div>
           ) : (
-            <div className="navbar-user-info">
-              <span className="navbar-user-name">
-                {user?.nombres} {user?.apellidos}
-              </span>
-              <span className="navbar-user-role">
-                {user?.rol}
-              </span>
-              <button
-                className="btn btn-secondary btn-sm"
-                onClick={handleLogout}
+            <div className="navbar-user-info" style={{display:'flex',alignItems:'center',gap:'12px'}}>
+              <Link
+                to="/mi-perfil"
+                className="navbar-logout-icon"
+                title="Mi Perfil"
+                aria-label="Mi Perfil"
+                style={{textDecoration:'none',display:'flex',alignItems:'center',justifyContent:'center'}}
               >
-                Cerrar Sesión
+                👤
+              </Link>
+              <button
+                className="navbar-logout-icon"
+                onClick={handleLogout}
+                title="Cerrar sesión"
+                aria-label="Cerrar sesión"
+              >
+                🔒
               </button>
             </div>
           )}

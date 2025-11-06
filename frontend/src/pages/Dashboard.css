@@ -63,6 +63,50 @@
   font-size: 1rem;
 }
 
+.año-selector {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.año-selector label {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.select-año {
+  padding: 10px 36px 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: white;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-secondary) 50%),
+                    linear-gradient(135deg, var(--text-secondary) 50%, transparent 50%);
+  background-position: calc(100% - 18px) calc(50% - 3px),
+                       calc(100% - 12px) calc(50% - 3px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+
+.select-año:hover {
+  border-color: var(--primary-color);
+}
+
+.select-año:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
 .dashboard-time {
   text-align: right;
 }
@@ -234,7 +278,35 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  position: relative;
 }
+
+.grados-section h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 120px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4f46e5, #7c3aed, #06b6d4, #22c55e);
+}
+
+/* Ranking de Deudores */
+.ranking-section { margin: 28px 0; }
+.ranking-section h2 { font-size: 1.5rem; font-weight:700; color: var(--text-primary); display:flex; align-items:center; gap:8px; margin-bottom: 16px; }
+.ranking-grid { display:grid; gap:16px; grid-template-columns: 1fr; }
+.ranking-card { background: var(--glass-bg); border:1px solid var(--glass-border); border-radius: var(--border-radius); box-shadow: var(--shadow); overflow:hidden; }
+.ranking-header { display:flex; align-items:center; justify-content: space-between; gap: 16px; padding: 12px 16px; border-bottom: 1px solid var(--glass-border); }
+.ranking-header h3 { margin:0; font-size:1rem; font-weight:700; color: var(--text-primary); }
+.ranking-actions { display:flex; gap:8px; align-items:center; flex-wrap: nowrap; }
+
+/* Mantener 1 columna para dar más ancho a cada grilla */
+
+/* Meses section */
+.meses-section { margin: 28px 0; }
+.meses-section h2 { font-size:1.5rem; font-weight:700; color: var(--text-primary); display:flex; align-items:center; gap:8px; margin-bottom: 8px; }
+.meses-actions { display:flex; justify-content:flex-end; gap:8px; margin-bottom:8px; }
 
 .grados-grid {
   display: grid;
@@ -260,11 +332,20 @@
   border-radius: var(--border-radius);
   padding: 20px;
   transition: var(--transition);
+  position: relative;
+  overflow: hidden;
 }
 
 .grado-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-medium);
+}
+
+.grado-card::before{
+  content:'';
+  position:absolute;
+  left:0;top:0;right:0;height:4px;
+  background: linear-gradient(90deg, #4f46e5, #7c3aed, #06b6d4, #22c55e);
 }
 
 .grado-header {
@@ -340,6 +421,194 @@
 }
 
 /* =====================================================
+   SECCIÓN DE MESES
+   ===================================================== */
+
+.meses-section {
+  margin-bottom: 32px;
+}
+
+.meses-section h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ranking-card {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.ranking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+}
+
+.ranking-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.export-btn {
+  padding: 8px 16px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.export-btn:hover:not(:disabled) {
+  background-color: var(--secondary-color);
+}
+
+.export-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   RANKING SECTION
+   ===================================================== */
+
+.ranking-section {
+  margin-bottom: 32px;
+}
+
+.ranking-section h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ranking-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+/* =====================================================
+   MODAL
+   ===================================================== */
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+}
+
+.modal {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-heavy);
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: var(--transition);
+}
+
+.close-btn:hover {
+  background: var(--light-color);
+  color: var(--text-primary);
+}
+
+.modal-actions {
+  padding: 16px 24px;
+  display: flex;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-body {
+  padding: 20px 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  background: var(--light-color);
+}
+
+.footer-item {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.footer-item strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.filter-select {
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  background: white;
+  cursor: pointer;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+/* =====================================================
    SECCIÓN DE ARCHIVOS
    ===================================================== */
 
@@ -355,6 +624,18 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  position: relative;
+}
+
+.archivos-section h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 160px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #4f46e5, #7c3aed, #06b6d4, #22c55e);
 }
 
 .archivos-list {
@@ -672,59 +953,138 @@
 }
 
 /* =====================================================
-   SELECTOR DE AÑO ACADÉMICO
+   MODAL OVERLAY (ALUMNOS POR GRADO)
    ===================================================== */
 
-.año-selector {
-  margin-top: 1rem;
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  justify-content: center;
+  z-index: 1000;
 }
 
-.año-selector label {
-  color: var(--text-primary);
-  font-size: 0.95rem;
-  font-weight: 500;
-}
-
-.select-año {
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  border: 1px solid var(--glass-border);
+.modal {
   background: var(--glass-bg);
-  color: var(--text-primary);
-  font-size: 1rem;
-  font-weight: 500;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-heavy);
+  width: 95vw !important;
+  max-width: 1200px !important;
+  min-width: 900px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+.modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--glass-border);
+  background: var(--background, #ffffff);
+  background-color: #ffffff;
+}
+
+.close-btn {
+  background: transparent;
+  border: 1px solid var(--glass-border);
+  border-radius: 6px;
+  padding: 4px 8px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
 }
 
-.select-año:hover {
-  background: rgba(255, 255, 255, 0.15);
-  border-color: var(--primary-color);
+.modal-actions {
+  position: sticky;
+  top: 48px; /* header height */
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--glass-border);
+  background: var(--background, #ffffff);
+  background-color: #ffffff;
 }
 
-.select-año:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.2);
+.export-btn {
+  background-image: linear-gradient(135deg, #4f46e5, #7c3aed, #06b6d4);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(99,102,241,0.2);
 }
 
-.select-año option {
-  background: #1976d2;
-  color: white;
+.export-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
-@media (max-width: 768px) {
-  .año-selector {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-  
-  .select-año {
-    width: 100%;
-  }
+.modal-body { padding: 12px 16px 16px; }
+
+/* Pretty select for modal filter */
+.filter-select{
+  appearance:none;
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  padding:8px 32px 8px 10px;
+  border:1px solid var(--glass-border);
+  border-radius:8px;
+  background: #fff;
+  color: var(--text-primary);
+  font-weight:600;
+  box-shadow: var(--shadow-light);
+  background-image: linear-gradient(45deg, transparent 50%, #666 50%),
+                   linear-gradient(135deg, #666 50%, transparent 50%),
+                   linear-gradient(to right, transparent, transparent);
+  background-position: calc(100% - 18px) calc(50% - 3px),
+                       calc(100% - 12px) calc(50% - 3px),
+                       calc(100% - 2.5em) 0.5em;
+  background-size: 6px 6px, 6px 6px, 1px 1.5em;
+  background-repeat: no-repeat;
 }
+.filter-select:focus{ outline:none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(25,118,210,0.15); }
+
+.table-wrapper { width: 100%; }
+.table { width: 100%; border-collapse: collapse; table-layout: auto; }
+.table th, .table td { padding: 12px 14px; border-bottom: 1px solid var(--glass-border); }
+.table thead tr { background: rgba(25,118,210,0.12); }
+.table th { text-align: left; color: var(--text-primary); font-weight: 700; }
+.table tbody tr:nth-child(even) { background: rgba(255,255,255,0.04); }
+
+/* Filas clickeables */
+.clickable-row {
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.clickable-row:hover {
+  background-color: #f0f9ff !important;
+  transform: translateX(2px);
+}
+
+.clickable-row:active {
+  transform: translateX(0);
+}
+
+.modal-footer{
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  padding: 10px 16px;
+  border-top: 1px solid var(--glass-border);
+  background: var(--background, #ffffff);
+}
+.modal-footer .footer-item{ font-size: 0.9rem; color: var(--text-primary); }

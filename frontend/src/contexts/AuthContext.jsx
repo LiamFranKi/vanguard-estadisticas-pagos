@@ -37,8 +37,9 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
-      const response = await axios.get('/api/auth/me');
-      setUser(response.data.user);
+      // Backend expone POST /api/auth/verify que recibe el token en el body
+      const response = await axios.post('/api/auth/verify', { token });
+      setUser(response.data.usuario || response.data.user || response.data?.usuario);
       setIsAuthenticated(true);
     } catch (error) {
       console.error('Error verificando autenticación:', error);
@@ -53,15 +54,15 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post('/api/auth/login', {
         dni,
-        password
+        clave: password
       });
 
-      const { token, user } = response.data;
+      const { token, usuario } = response.data;
       
       localStorage.setItem('token', token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       
-      setUser(user);
+      setUser(usuario);
       setIsAuthenticated(true);
       
       return { success: true };
@@ -75,8 +76,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
+    // No existe endpoint /logout en el backend; limpiamos estado en cliente
     try {
-      await axios.post('/api/auth/logout');
+      // Si en el futuro se implementa revocación, aquí podríamos llamar al endpoint
     } catch (error) {
       console.error('Error en logout:', error);
     } finally {

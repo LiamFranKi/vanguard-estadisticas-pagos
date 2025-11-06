@@ -12,6 +12,7 @@ router.get('/', async (req, res) => {
     const { 
       search = '', 
       grado = '', 
+      grado_id = '',
       page = 1, 
       limit = 50,
       año 
@@ -31,10 +32,11 @@ router.get('/', async (req, res) => {
       paramIndex++;
     }
 
-    // Filtro por grado
-    if (grado) {
+    // Filtro por grado (acepta grado_id o grado)
+    const gradoParam = grado_id || grado;
+    if (gradoParam) {
       whereClause += ` AND g.id = $${paramIndex}`;
-      params.push(parseInt(grado));
+      params.push(parseInt(gradoParam));
       paramIndex++;
     }
 
@@ -42,17 +44,25 @@ router.get('/', async (req, res) => {
     const offset = (parseInt(page) - 1) * parseInt(limit);
 
     const alumnosResult = await query(`
+      WITH pagos_agg AS (
+        SELECT alumno_id, COUNT(*) AS total_pagos, SUM(monto) AS total_pagado
+        FROM pagos WHERE año_academico = $1 GROUP BY alumno_id
+      ), deudas_agg AS (
+        SELECT alumno_id, SUM(monto_deuda) AS deuda_total
+        FROM deudas WHERE año_academico = $1 GROUP BY alumno_id
+      )
       SELECT 
         a.id, a.dni, a.nombres, a.apellidos, a.grado_id, a.seccion, 
         a.activo, a.created_at, a.updated_at, a.año_academico,
         g.nombre as grado_nombre, g.nivel,
-        COUNT(p.id) as total_pagos,
-        COALESCE(SUM(p.monto), 0) as total_pagado
+        COALESCE(p.total_pagos, 0) as total_pagos,
+        COALESCE(p.total_pagado, 0) as total_pagado,
+        COALESCE(d.deuda_total, 0) as deuda_total
       FROM alumnos a
       LEFT JOIN grados g ON a.grado_id = g.id
-      LEFT JOIN pagos p ON a.id = p.alumno_id AND p.año_academico = a.año_academico
+      LEFT JOIN pagos_agg p ON a.id = p.alumno_id
+      LEFT JOIN deudas_agg d ON a.id = d.alumno_id
       ${whereClause}
-      GROUP BY a.id, g.nombre, g.nivel
       ORDER BY a.apellidos, a.nombres
       LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
     `, [...params, parseInt(limit), offset]);
@@ -61,6 +71,7 @@ router.get('/', async (req, res) => {
     const countResult = await query(`
       SELECT COUNT(*) as total
       FROM alumnos a
+      LEFT JOIN grados g ON a.grado_id = g.id
       ${whereClause}
     `, params);
 

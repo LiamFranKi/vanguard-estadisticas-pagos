@@ -359,6 +359,34 @@ MIT License - Ver [LICENSE](LICENSE) para más detalles.
 
 ---
 
+## 📝 Historial de Cambios (2025-10-27)
+
+### UI/UX Landing y Login
+- Hero del Landing con gradiente `--primary-color → --secondary-color` y círculos difuminados.
+- Botones primarios con gradiente y sombras consistentes.
+- Cards de "Números que Hablan" con variantes de color y hover.
+- Login con fondo gradiente + círculos, card blanco claro, título azul, inputs azul claro, botón en gradiente y enlace "← Volver al inicio".
+- Ajustes de espaciado para un card más compacto.
+
+### Paleta y Configuración desde BD
+- `ConfigContext` lee `GET /api/config` (forma `{ success, data }`).
+- Se propagan `color_primario` y `color_secundario` a variables CSS globales `--primary-color` y `--secondary-color` al cargar.
+- Login y Landing usan `config.nombre_sistema`, `config.descripcion_sistema` y `config.logo` (si existe).
+
+### Footer dinámico
+- Footer del Landing muestra logo/nombre/descripcion/contacto desde BD.
+- Año mostrado siempre es el actual (`new Date().getFullYear()`).
+
+### Autenticación
+- `checkAuth` ahora usa `POST /api/auth/verify` con `{ token }`.
+- `logout` es client-side (se eliminó llamada a `/api/auth/logout`).
+
+### Notas de estilo y compatibilidad
+- El Login permanece claro aun en `prefers-color-scheme: dark`.
+- Se añadió soporte para logo desde BD en Login; en Landing se mantiene sin logo por decisión de diseño.
+
+---
+
 ## 🎉 **¡Sistema Listo!**
 
 El sistema está completamente configurado y listo para usar. Incluye:

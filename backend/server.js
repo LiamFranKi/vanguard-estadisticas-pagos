@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
-require('dotenv').config();
+require('dotenv').config({ path: './env.local' });
 
 const { connectDB } = require('./utils/database');
 
@@ -15,6 +15,9 @@ const deudasRoutes = require('./routes/deudas.routes');
 const estadisticasRoutes = require('./routes/estadisticas.routes');
 const archivosRoutes = require('./routes/archivos.routes');
 const authRoutes = require('./routes/auth.routes');
+const añosRoutes = require('./routes/anios.routes');
+const configRoutes = require('./routes/config.routes');
+const usuariosRoutes = require('./routes/usuarios.routes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -56,12 +59,9 @@ app.use('/api/pagos', pagosRoutes);
 app.use('/api/deudas', deudasRoutes);
 app.use('/api/estadisticas', estadisticasRoutes);
 app.use('/api/archivos', archivosRoutes);
-
-// Importar rutas de años académicos
-const añosRoutes = require('./routes/años.routes');
-
-// Rutas de años académicos
-app.use('/api/años', añosRoutes);
+app.use('/api/anios', añosRoutes);
+app.use('/api/config', configRoutes);
+app.use('/api/usuarios', usuariosRoutes);
 
 // Ruta de salud
 app.get('/api/health', (req, res) => {
@@ -85,7 +85,6 @@ app.get('/', (req, res) => {
       deudas: '/api/deudas',
       estadisticas: '/api/estadisticas',
       archivos: '/api/archivos',
-      años: '/api/años',
       health: '/api/health'
     }
   });

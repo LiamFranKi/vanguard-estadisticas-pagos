@@ -32,7 +32,10 @@ const query = async (text, params) => {
   try {
     const res = await pool.query(text, params);
     const duration = Date.now() - start;
-    console.log('📊 Query ejecutada:', { text, duration, rows: res.rowCount });
+    // Log solo queries lentas (> 100ms) para reducir ruido
+    if (duration > 100) {
+      console.log('📊 Query lenta:', { text: text.substring(0, 80), duration, rows: res.rowCount });
+    }
     return res;
   } catch (error) {
     console.error('❌ Error en query:', error);

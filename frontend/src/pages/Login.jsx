@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useConfig } from '../contexts/ConfigContext';
 import Swal from 'sweetalert2';
@@ -85,13 +85,17 @@ const Login = () => {
         {/* Logo y título */}
         <div className="login-header">
           <div className="login-logo">
-            📊
+            {config?.logo ? (
+              <img src={config.logo} alt="Logo" />
+            ) : (
+              '📊'
+            )}
           </div>
           <h1 className="login-title">
             {config?.nombre_sistema || 'Vanguard Estadísticas'}
           </h1>
           <p className="login-subtitle">
-            Sistema de gestión de pagos de pensiones
+            {config?.descripcion_sistema || 'Sistema de gestión de pagos de pensiones'}
           </p>
         </div>
 
@@ -109,9 +113,9 @@ const Login = () => {
                 value={formData.dni}
                 onChange={handleChange}
                 className="form-input"
-                placeholder="Ingresa tu DNI"
-                maxLength="8"
-                disabled={loading}
+                 placeholder="Ingresa tu DNI"
+                 maxLength="9"
+                 disabled={loading}
               />
             </div>
 
@@ -146,28 +150,9 @@ const Login = () => {
               )}
             </button>
           </form>
-
-          {/* Información de prueba */}
-          <div className="login-info">
-            <h3>🔑 Credenciales de Prueba</h3>
-            <div className="login-credentials">
-              <div className="credential-item">
-                <strong>DNI:</strong> 12345678
-              </div>
-              <div className="credential-item">
-                <strong>Contraseña:</strong> password
-              </div>
-              <div className="credential-item">
-                <strong>Rol:</strong> Administrador
-              </div>
-            </div>
+          <div className="back-link">
+            <Link to="/">← Volver al inicio</Link>
           </div>
-        </div>
-
-        {/* Footer */}
-        <div className="login-footer">
-          <p>© 2024 Vanguard Schools - Todos los derechos reservados</p>
-          <p>Sistema de Estadísticas de Pagos v1.0.0</p>
         </div>
       </div>
     </div>

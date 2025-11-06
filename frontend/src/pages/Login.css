@@ -8,32 +8,45 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background: var(--background-gradient);
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
   position: relative;
   overflow: hidden;
 }
 
-.login-page::before {
+.login-page::before,
+.login-page::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-  opacity: 0.3;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.35;
   pointer-events: none;
+}
+
+.login-page::before {
+  width: 520px;
+  height: 520px;
+  left: -160px;
+  bottom: -140px;
+  background: radial-gradient(closest-side, rgba(255,255,255,0.35), transparent 70%);
+}
+
+.login-page::after {
+  width: 480px;
+  height: 480px;
+  right: -140px;
+  top: -120px;
+  background: radial-gradient(closest-side, rgba(255,255,255,0.25), transparent 70%);
 }
 
 .login-container {
   width: 100%;
-  max-width: 400px;
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-heavy);
-  padding: 40px;
+  max-width: 500px;
+  background: #ffffff;
+  border: 1px solid #eef2ff;
+  border-radius: 16px;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.14);
+  padding: 24px 36px;
   position: relative;
   z-index: 1;
   animation: slideInUp 0.6s ease-out;
@@ -45,36 +58,32 @@
 
 .login-header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .login-logo {
-  width: 80px;
-  height: 80px;
+  width: 96px;
+  height: 96px;
   background: var(--primary-color);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.5rem;
+  font-size: 3rem;
   margin: 0 auto 20px;
-  box-shadow: var(--shadow-medium);
-  animation: pulse 2s infinite;
+  box-shadow: var(--shadow);
+  animation: none;
 }
 
 .login-title {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--primary-color);
   margin-bottom: 8px;
   line-height: 1.2;
 }
 
-.login-subtitle {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-  margin: 0;
-}
+.login-subtitle { color: #6b7280; font-size: 0.95rem; margin: 0; }
 
 /* =====================================================
    FORMULARIO
@@ -96,17 +105,16 @@
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #374151;
   font-size: 0.9rem;
 }
 
 .form-input {
   width: 100%;
   padding: 14px 16px;
-  border: 1px solid var(--glass-border);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(5px);
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #eef2ff;
   color: var(--text-primary);
   font-size: 0.95rem;
   transition: var(--transition);
@@ -116,12 +124,12 @@
 .form-input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
-  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 3px #2563eb1a;
+  background: white;
 }
 
 .form-input::placeholder {
-  color: var(--text-light);
+  color: #9aa3b2;
 }
 
 .form-input:disabled {
@@ -144,11 +152,31 @@
   justify-content: center;
   gap: 8px;
   transition: var(--transition);
+  background-image: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  border: none;
+  border-radius: 10px;
 }
 
 .btn-login:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-medium);
+  box-shadow: var(--shadow-lg);
+  filter: brightness(1.03);
+}
+
+/* Back link below button */
+.back-link {
+  text-align: center;
+  margin-top: 32px;
+}
+
+.back-link a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.back-link a:hover {
+  text-decoration: underline;
 }
 
 .btn-login.loading {
@@ -170,8 +198,8 @@
    ===================================================== */
 
 .login-info {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--glass-border);
+  background: var(--light-color);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 20px;
   text-align: center;
@@ -215,7 +243,7 @@
 .login-footer {
   text-align: center;
   padding-top: 20px;
-  border-top: 1px solid var(--glass-border);
+  border-top: 1px solid var(--border-color);
 }
 
 .login-footer p {
@@ -282,7 +310,7 @@
 /* Móviles grandes (481px - 768px) */
 @media (min-width: 481px) and (max-width: 768px) {
   .login-container {
-    padding: 32px;
+    padding: 24px 28px;
   }
   
   .login-logo {
@@ -299,8 +327,8 @@
 /* Tablets (769px - 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
   .login-container {
-    padding: 36px;
-    max-width: 420px;
+    padding: 28px 36px;
+    max-width: 440px;
   }
   
   .login-logo {
@@ -309,16 +337,14 @@
     font-size: 2.5rem;
   }
   
-  .login-title {
-    font-size: 1.8rem;
-  }
+  .login-title { font-size: 2rem; }
 }
 
 /* Escritorio (1025px+) */
 @media (min-width: 1025px) {
   .login-container {
-    padding: 40px;
-    max-width: 400px;
+    padding: 30px 44px;
+    max-width: 480px;
   }
 }
 
@@ -358,7 +384,7 @@
 
 .login-container:hover {
   transform: translateY(-2px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-lg);
 }
 
 .form-input.error {
@@ -386,16 +412,14 @@
    ===================================================== */
 
 @media (prefers-color-scheme: dark) {
+  /* Mantener tarjeta clara incluso en modo oscuro del SO */
   .login-container {
-    background: rgba(0, 0, 0, 0.3);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: #ffffff;
+    border-color: #eef2ff;
   }
-  
-  .form-input {
-    background: rgba(0, 0, 0, 0.2);
-    border-color: rgba(255, 255, 255, 0.1);
-  }
-  
+
+  .login-title { color: var(--primary-color); }
+  .login-subtitle { color: #6b7280; }
   .login-info {
     background: rgba(0, 0, 0, 0.2);
     border-color: rgba(255, 255, 255, 0.1);
