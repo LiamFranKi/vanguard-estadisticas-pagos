@@ -1,0 +1,210 @@
+# =====================================================
+# COMANDOS PARA DEPLOYMENT - HOSTINGER VPS
+# Copiar y pegar uno por uno en PuTTY
+# =====================================================
+
+# =====================================================
+# PASO 1: ACTUALIZAR SISTEMA
+# =====================================================
+apt update
+apt upgrade -y
+
+# =====================================================
+# PASO 2: INSTALAR NODE.JS 20.x LTS
+# =====================================================
+curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+apt install -y nodejs
+
+# Verificar instalación
+node -v
+npm -v
+
+# =====================================================
+# PASO 3: INSTALAR POSTGRESQL
+# =====================================================
+apt install -y postgresql postgresql-contrib
+
+# Verificar que está corriendo
+systemctl status postgresql
+
+# =====================================================
+# PASO 4: INSTALAR PM2 Y NGINX
+# =====================================================
+npm install -g pm2
+apt install -y nginx
+
+# =====================================================
+# PASO 5: CREAR ESTRUCTURA DE CARPETAS
+# =====================================================
+mkdir -p /var/www/estadisticas/backend
+mkdir -p /var/www/estadisticas/frontend
+cd /var/www/estadisticas
+
+# =====================================================
+# PASO 6: CLONAR DESDE GITHUB (ALTERNATIVA A WINSCP)
+# =====================================================
+cd /var/www/estadisticas
+git clone https://github.com/LiamFranKi/vanguard-estadisticas-pagos.git temp
+mv temp/backend/* backend/
+mv temp/frontend/* frontend/
+mv temp/database .
+rm -rf temp
+
+# =====================================================
+# PASO 7: CONFIGURAR POSTGRESQL
+# =====================================================
+su - postgres
+createdb estadisticas_pagos
+exit
+
+# Importar schema
+psql -U postgres -d estadisticas_pagos < /var/www/estadisticas/database/schema_completo.sql
+
+# =====================================================
+# PASO 8: CONFIGURAR BACKEND
+# =====================================================
+cd /var/www/estadisticas/backend
+
+# Crear archivo .env
+cat > .env << 'EOF'
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=estadisticas_pagos
+DB_USER=postgres
+DB_PASSWORD=Vanguard2025@&
+JWT_SECRET=vanguard_estadisticas_jwt_secret_2025_super_seguro
+JWT_EXPIRES_IN=24h
+PORT=5001
+FRONTEND_URL=https://estadisticas.vanguardschools.com
+NODE_ENV=production
+UPLOAD_MAX_SIZE=10485760
+EOF
+
+# Instalar dependencias
+npm install --production
+
+# Iniciar con PM2
+pm2 start server.js --name estadisticas-backend
+pm2 save
+pm2 startup
+
+# =====================================================
+# PASO 9: BUILD DEL FRONTEND
+# =====================================================
+cd /var/www/estadisticas/frontend
+
+# Crear .env.production
+cat > .env.production << 'EOF'
+VITE_API_URL=/api
+EOF
+
+# Instalar y compilar
+npm install
+npm run build
+
+# =====================================================
+# PASO 10: CONFIGURAR NGINX
+# =====================================================
+cat > /etc/nginx/sites-available/estadisticas.vanguardschools.com << 'EOF'
+server {
+    listen 80;
+    listen [::]:80;
+    server_name estadisticas.vanguardschools.com;
+
+    root /var/www/estadisticas/frontend/dist;
+    index index.html;
+
+    client_max_body_size 10M;
+
+    location /api/ {
+        proxy_pass http://localhost:5001/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    location /uploads/ {
+        alias /var/www/estadisticas/backend/uploads/;
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    gzip on;
+    gzip_vary on;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css text/xml text/javascript application/javascript application/json application/xml+rss;
+}
+EOF
+
+# Activar sitio
+ln -s /etc/nginx/sites-available/estadisticas.vanguardschools.com /etc/nginx/sites-enabled/
+
+# Verificar configuración
+nginx -t
+
+# Recargar Nginx
+systemctl reload nginx
+
+# =====================================================
+# PASO 11: INSTALAR SSL (CERTBOT)
+# =====================================================
+apt install -y certbot python3-certbot-nginx
+certbot --nginx -d estadisticas.vanguardschools.com
+
+# Seguir instrucciones de Certbot
+# Email: admin@vanguardschools.com
+# Términos: Y
+# Compartir: N
+# Redirect: 2 (Sí)
+
+# =====================================================
+# PASO 12: CREAR USUARIO ADMINISTRADOR
+# =====================================================
+# Generar hash de contraseña
+echo "SELECT crypt('admin123', gen_salt('bf', 10));" | psql -U postgres -d estadisticas_pagos -t
+
+# Copiar el hash que aparece, luego ejecutar (reemplaza HASH_AQUI):
+cat > /tmp/create_admin.sql << 'EOF'
+INSERT INTO usuarios (dni, nombres, apellidos, email, rol, clave, activo)
+VALUES (
+    '11111111',
+    'Walter',
+    'Lozano',
+    'admin@vanguardschools.com',
+    'Administrador',
+    'HASH_AQUI',
+    true
+) ON CONFLICT (dni) DO UPDATE SET clave = EXCLUDED.clave;
+EOF
+
+psql -U postgres -d estadisticas_pagos -f /tmp/create_admin.sql
+
+# =====================================================
+# PASO 13: VERIFICAR TODO
+# =====================================================
+# Ver estado de PM2
+pm2 status
+
+# Ver logs
+pm2 logs estadisticas-backend --lines 50
+
+# Ver estado de Nginx
+systemctl status nginx
+
+# Probar el sitio
+curl http://localhost:5001/api/health
+curl https://estadisticas.vanguardschools.com
+
+# =====================================================
+# FIN - Sistema Deployado
+# =====================================================
+
