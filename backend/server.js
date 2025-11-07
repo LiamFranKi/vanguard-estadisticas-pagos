@@ -4,7 +4,7 @@ const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
-require('dotenv').config({ path: './env.local' });
+require('dotenv').config();
 
 const { connectDB } = require('./utils/database');
 
@@ -20,6 +20,7 @@ const configRoutes = require('./routes/config.routes');
 const usuariosRoutes = require('./routes/usuarios.routes');
 
 const app = express();
+app.set('trust proxy', true);
 const PORT = process.env.PORT || 5000;
 
 // Middleware de seguridad
@@ -29,7 +30,7 @@ app.use(compression());
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutos
-  max: 100, // máximo 100 requests por IP
+  max: 1000, // máximo 1000 requests por IP
   message: 'Demasiadas solicitudes desde esta IP, intenta de nuevo en 15 minutos.'
 });
 app.use(limiter);

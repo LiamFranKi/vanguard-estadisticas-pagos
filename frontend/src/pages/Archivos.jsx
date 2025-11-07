@@ -3,6 +3,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useAño } from '../contexts/AñoContext';
 import { listarArchivos, subirArchivo, eliminarArchivo as eliminarArchivoSvc } from '../services/archivos';
+import './Admin.css';
 
 const Archivos = () => {
   const { añoActual, cambiarAño, obtenerAñosParaSelect, crearAño, eliminarAño } = useAño();
@@ -65,12 +66,13 @@ const Archivos = () => {
   const pages = Math.max(1, Math.ceil(total / limit));
 
   return (
-    <div className="container" style={{ padding: '24px 0' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <div>
-          <h1 style={{ margin: 0 }}>📁 Archivos</h1>
-          <p style={{ margin: 0, color: 'var(--text-secondary)' }}>Sube Excel Principal de Deudas y Excel de Alumnos Pagadores por año</p>
-        </div>
+    <div className="admin-page">
+      <div className="page-header">
+        <h1 className="page-title">📁 Archivos</h1>
+        <p className="page-subtitle">Sube Excel Principal de Deudas y Excel de Alumnos Pagadores por año</p>
+      </div>
+      
+      <div className="page-actions">
         <div className="año-selector" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <label htmlFor="año-archivos">Año:</label>
           <select id="año-archivos" value={añoActual} onChange={(e)=>cambiarAño(parseInt(e.target.value))} className="select-año">
@@ -150,7 +152,7 @@ const Archivos = () => {
 
       <div style={{ display: 'grid', gap: 12, marginBottom: 20 }}>
         {/* Excel Principal de Deudas */}
-        <form onSubmit={handleUploadDeudas} style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 12, alignItems: 'center', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', borderRadius: 12, padding: 16 }}>
+        <form onSubmit={handleUploadDeudas} className="upload-section" style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 12, alignItems: 'center' }}>
           <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
             <span style={{ fontWeight: 700 }}>📑 Excel Principal de Deudas (.xlsx)</span>
             <div
@@ -180,7 +182,7 @@ const Archivos = () => {
         </form>
 
         {/* Excel de Alumnos Pagadores */}
-        <form onSubmit={handleUploadExcel} style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 12, alignItems: 'center', background: 'var(--glass-bg)', border: '1px solid var(--glass-border)', borderRadius: 12, padding: 16 }}>
+        <form onSubmit={handleUploadExcel} className="upload-section" style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 12, alignItems: 'center' }}>
           <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
             <span style={{ fontWeight: 700 }}>📊 Excel de Alumnos Pagadores (.xlsx)</span>
             <div
@@ -223,8 +225,9 @@ const Archivos = () => {
         </select>
       </div>
 
-      <div className="table-responsive" style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: 12 }}>
-        <table className="table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <div className="table-container">
+        <div className="table-wrapper">
+          <table className="responsive-table">
           <thead>
             <tr>
               <th style={{ padding: 12, textAlign: 'left' }}>Archivo</th>
@@ -277,6 +280,7 @@ const Archivos = () => {
             )}
           </tbody>
         </table>
+        </div>
       </div>
 
       <div className="pagination" style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 12 }}>

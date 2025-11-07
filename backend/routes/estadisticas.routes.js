@@ -712,7 +712,7 @@ router.get('/saldo-por-grado', async (req, res) => {
     const mes = req.query.mes ? parseInt(req.query.mes) : null;
 
     // Mapeo de número de mes a nombre del mes (como están en la BD)
-    const mesesNombres = ['', '', '', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    const mesesNombres = ['', '', '', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'setiembre', 'octubre', 'noviembre', 'diciembre'];
 
     // Determinar el tipo de pago según el mes
     let whereTipoPago = '';
@@ -788,7 +788,7 @@ router.get('/alumnos-deudores-mes', async (req, res) => {
     }
 
     // Mapeo de número de mes a nombre del mes
-    const mesesNombres = ['', '', '', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    const mesesNombres = ['', '', '', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'setiembre', 'octubre', 'noviembre', 'diciembre'];
 
     // Determinar el tipo de pago según el mes
     let whereTipoPago = '';

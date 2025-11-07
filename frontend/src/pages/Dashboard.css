@@ -296,7 +296,7 @@
 .ranking-section { margin: 28px 0; }
 .ranking-section h2 { font-size: 1.5rem; font-weight:700; color: var(--text-primary); display:flex; align-items:center; gap:8px; margin-bottom: 16px; }
 .ranking-grid { display:grid; gap:16px; grid-template-columns: 1fr; }
-.ranking-card { background: var(--glass-bg); border:1px solid var(--glass-border); border-radius: var(--border-radius); box-shadow: var(--shadow); overflow:hidden; }
+.ranking-card { background: var(--glass-bg); border:1px solid var(--glass-border); border-radius: var(--border-radius); box-shadow: var(--shadow); overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .ranking-header { display:flex; align-items:center; justify-content: space-between; gap: 16px; padding: 12px 16px; border-bottom: 1px solid var(--glass-border); }
 .ranking-header h3 { margin:0; font-size:1rem; font-weight:700; color: var(--text-primary); }
 .ranking-actions { display:flex; gap:8px; align-items:center; flex-wrap: nowrap; }
@@ -963,7 +963,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: 9999;
 }
 
 .modal {
@@ -979,6 +979,7 @@
   flex-direction: column;
   overflow: auto;
   box-sizing: border-box;
+  z-index: 10000;
 }
 
 .modal-header {
@@ -1055,8 +1056,8 @@
 }
 .filter-select:focus{ outline:none; border-color: var(--primary-color); box-shadow: 0 0 0 3px rgba(25,118,210,0.15); }
 
-.table-wrapper { width: 100%; }
-.table { width: 100%; border-collapse: collapse; table-layout: auto; }
+.table-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.table { width: 100%; border-collapse: collapse; table-layout: auto; min-width: 500px; }
 .table th, .table td { padding: 12px 14px; border-bottom: 1px solid var(--glass-border); }
 .table thead tr { background: rgba(25,118,210,0.12); }
 .table th { text-align: left; color: var(--text-primary); font-weight: 700; }
@@ -1088,3 +1089,200 @@
   background: var(--background, #ffffff);
 }
 .modal-footer .footer-item{ font-size: 0.9rem; color: var(--text-primary); }
+
+/* =====================================================
+   AJUSTES ESPECÍFICOS PARA MÓVILES
+   ===================================================== */
+
+/* MÓVILES: Reducir tamaño de modales y habilitar scroll horizontal en tablas */
+@media (max-width: 768px) {
+  /* Modales más pequeños en móviles */
+  .modal {
+    min-width: auto !important;
+    width: 95vw !important;
+    max-width: 95vw !important;
+    max-height: 85vh !important;
+    margin: 10px;
+  }
+  
+  .modal-header {
+    padding: 12px 16px;
+  }
+  
+  .modal-header h3 {
+    font-size: 1rem;
+    line-height: 1.3;
+  }
+  
+  .modal-body {
+    padding: 8px !important;
+  }
+  
+  /* Gráficos dentro de modales - usar todo el ancho disponible */
+  .modal-body .chart-wrapper {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+  }
+  
+  .modal-body .chart-container {
+    padding: 8px 4px !important;
+    margin: 0 !important;
+  }
+  
+  .modal-footer {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px;
+    font-size: 0.8rem;
+  }
+  
+  .footer-item {
+    font-size: 0.75rem;
+    flex: 1 1 45%;
+    min-width: 45%;
+  }
+  
+  /* Tablas con scroll horizontal en móviles */
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+  }
+  
+  .table {
+    min-width: 600px; /* Forzar ancho mínimo para permitir scroll */
+    font-size: 0.85rem;
+  }
+  
+  .table th,
+  .table td {
+    padding: 8px 10px;
+    white-space: nowrap;
+  }
+  
+  /* Gráficos más anchos y pequeños en modales móviles */
+  .chart-wrapper {
+    height: 280px !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  
+  /* Hacer los gráficos de Chart.js usar todo el ancho */
+  .chart-container {
+    padding: 12px 8px;
+  }
+  
+  /* Botones de exportar más pequeños y centrados */
+  .export-btn {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .ranking-actions,
+  .modal-actions {
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center !important;
+  }
+  
+  .ranking-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 8px;
+  }
+  
+  .ranking-header h3 {
+    width: 100%;
+    text-align: center;
+  }
+  
+  /* Navbar mobile menu - asegurar que se vea bien */
+  .navbar-mobile-section h3 {
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+  }
+  
+  .navbar-mobile-link {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+  
+  /* Hacer los h2 más pequeños en móvil */
+  .meses-section h2,
+  .ranking-section h2,
+  .grados-section h2 {
+    font-size: 1.2rem;
+  }
+  
+  /* Ajustes de padding para modales - más espacio para gráficos */
+  .modal-body > div {
+    padding: 0 !important;
+  }
+  
+  /* Tablas dentro de modales con sticky header mejorado */
+  .modal-body .table thead {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10 !important;
+    background: rgba(25,118,210,0.15) !important;
+  }
+  
+  .modal-body .table thead th {
+    background: rgba(25,118,210,0.15) !important;
+  }
+}
+
+/* MÓVILES PEQUEÑOS: Ajustes adicionales */
+@media (max-width: 480px) {
+  .modal {
+    max-height: 90vh !important;
+  }
+  
+  .modal-header h3 {
+    font-size: 0.9rem;
+  }
+  
+  .table {
+    font-size: 0.75rem;
+    min-width: 500px; /* Menos ancho mínimo en pantallas muy pequeñas */
+  }
+  
+  .table th,
+  .table td {
+    padding: 6px 8px;
+  }
+  
+  .chart-wrapper {
+    height: 220px !important;
+  }
+  
+  .export-btn {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+  
+  /* Gráficos aún más anchos en pantallas muy pequeñas */
+  .chart-container {
+    padding: 8px 4px;
+  }
+  
+  .chart-wrapper {
+    height: 240px !important;
+  }
+  
+  /* Centrar completamente los botones de acción */
+  .ranking-actions,
+  .modal-actions {
+    width: 100%;
+    justify-content: center !important;
+  }
+  
+  /* Ajustes específicos para el modal de estadísticas generales */
+  .modal[style*="maxWidth:'1000px'"] .chart-wrapper,
+  .modal[style*="max-width:1000px"] .chart-wrapper {
+    height: 320px !important;
+    padding: 0 4px !important;
+  }
+}
