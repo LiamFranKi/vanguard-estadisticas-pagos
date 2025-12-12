@@ -1,0 +1,171 @@
+# 🚀 COMANDOS RÁPIDOS PARA SOLUCIONAR PROBLEMAS EN VPS
+# Copia y pega estos comandos en PuTTY uno por uno
+
+# ============================================
+# 1. VERIFICAR ESTADO ACTUAL
+# ============================================
+
+# Ver estado de PM2 (backend)
+pm2 status
+
+# Ver logs del backend (últimas 50 líneas)
+pm2 logs estadisticas-backend --lines 50
+
+# Ver estado de Nginx
+systemctl status nginx
+
+# Ver errores de Nginx
+tail -n 50 /var/log/nginx/estadisticas-error.log
+
+# Ver estado de PostgreSQL
+systemctl status postgresql
+
+# Verificar puerto 5001
+netstat -tulpn | grep 5001
+
+# ============================================
+# 2. REINICIAR SERVICIOS (Si hay problemas)
+# ============================================
+
+# Reiniciar backend
+pm2 restart estadisticas-backend
+
+# Reiniciar Nginx
+systemctl restart nginx
+
+# Reiniciar PostgreSQL
+systemctl restart postgresql
+
+# ============================================
+# 3. VERIFICAR ESTRUCTURA DE ARCHIVOS
+# ============================================
+
+# Verificar directorio principal
+ls -la /var/www/estadisticas/
+
+# Verificar backend
+ls -la /var/www/estadisticas/backend/
+
+# Verificar frontend dist
+ls -la /var/www/estadisticas/frontend/dist/
+
+# Verificar que existe .env en backend
+ls -la /var/www/estadisticas/backend/.env
+
+# ============================================
+# 4. PROBAR CONEXIONES
+# ============================================
+
+# Probar API localmente
+curl http://localhost:5001/api/health
+
+# Probar desde fuera (desde tu PC)
+curl https://estadisticas.vanguardschools.com/api/health
+
+# ============================================
+# 5. RECONSTRUIR FRONTEND (Si está roto)
+# ============================================
+
+cd /var/www/estadisticas/frontend
+npm install
+npm run build
+systemctl reload nginx
+
+# ============================================
+# 6. REINSTALAR DEPENDENCIAS BACKEND
+# ============================================
+
+cd /var/www/estadisticas/backend
+npm install
+pm2 restart estadisticas-backend
+
+# ============================================
+# 7. VERIFICAR PERMISOS
+# ============================================
+
+# Permisos de uploads
+chown -R www-data:www-data /var/www/estadisticas/backend/uploads
+chmod -R 755 /var/www/estadisticas/backend/uploads
+
+# Permisos de frontend dist
+chown -R www-data:www-data /var/www/estadisticas/frontend/dist
+chmod -R 755 /var/www/estadisticas/frontend/dist
+
+# ============================================
+# 8. ACTUALIZAR DESDE GITHUB
+# ============================================
+
+cd /var/www/estadisticas
+git pull origin master
+cd backend && npm install && pm2 restart estadisticas-backend
+cd ../frontend && npm install && npm run build
+systemctl reload nginx
+
+# ============================================
+# 9. VER TODOS LOS LOGS
+# ============================================
+
+# Logs del backend
+pm2 logs estadisticas-backend --lines 100
+
+# Logs de Nginx (errores)
+tail -f /var/log/nginx/estadisticas-error.log
+
+# Logs de Nginx (acceso)
+tail -f /var/log/nginx/estadisticas-access.log
+
+# ============================================
+# 10. VERIFICAR CONFIGURACIÓN NGINX
+# ============================================
+
+# Ver configuración
+cat /etc/nginx/sites-available/estadisticas
+
+# Verificar sintaxis
+nginx -t
+
+# ============================================
+# 11. VERIFICAR BASE DE DATOS
+# ============================================
+
+# Conectar a PostgreSQL
+sudo -u postgres psql -d estadisticas_pagos
+
+# Dentro de PostgreSQL:
+# \dt          (ver tablas)
+# \du          (ver usuarios)
+# SELECT COUNT(*) FROM alumnos;  (verificar datos)
+# \q           (salir)
+
+# ============================================
+# 12. BACKUP DE BASE DE DATOS
+# ============================================
+
+sudo -u postgres pg_dump estadisticas_pagos > backup_$(date +%Y%m%d_%H%M%S).sql
+
+# ============================================
+# 13. VERIFICAR ESPACIO Y RECURSOS
+# ============================================
+
+# Espacio en disco
+df -h
+
+# Memoria disponible
+free -h
+
+# Procesos de Node.js
+ps aux | grep node
+
+# ============================================
+# 14. REINICIAR TODO (Último recurso)
+# ============================================
+
+pm2 restart estadisticas-backend
+systemctl restart nginx
+systemctl restart postgresql
+
+# Verificar que todo está corriendo
+pm2 status
+systemctl status nginx
+systemctl status postgresql
+

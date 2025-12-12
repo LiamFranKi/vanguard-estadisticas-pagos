@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useConfig } from '../contexts/ConfigContext';
@@ -60,147 +61,162 @@ const Navbar = () => {
     { path: '/configuracion', label: 'Configuración', icon: '⚙️', mobileIcon: '⚙️' }
   ];
 
-  return (
-    <nav className="navbar">
-      <div className="navbar-content">
-        {/* Logo y marca */}
-        <Link to="/dashboard" className="navbar-brand" onClick={closeMobileMenu}>
-          <div className="navbar-logo">
-            📊
-          </div>
-          <span className="navbar-brand-text">
-            {config?.nombre_sistema || 'Vanguard Estadísticas'}
-          </span>
-        </Link>
+  // Renderizar menú móvil usando Portal (fuera del navbar)
+  const mobileMenuPortal = isMobile && isMobileMenuOpen ? ReactDOM.createPortal(
+    <div className="navbar-mobile-menu">
+      <div className="navbar-mobile-content">
+        {/* Enlaces de navegación */}
+        <div className="navbar-mobile-section">
+          <h3>Navegación</h3>
+          {menuItems.map((item) => (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`navbar-mobile-link ${location.pathname === item.path ? 'active' : ''}`}
+              onClick={closeMobileMenu}
+            >
+              <span className="navbar-mobile-icon">{item.mobileIcon}</span>
+              <span>{item.label}</span>
+            </Link>
+          ))}
+          {/* Mi Perfil - solo en móvil */}
+          <Link
+            to="/mi-perfil"
+            className={`navbar-mobile-link ${location.pathname === '/mi-perfil' ? 'active' : ''}`}
+            onClick={closeMobileMenu}
+          >
+            <span className="navbar-mobile-icon">👤</span>
+            <span>Mi Perfil</span>
+          </Link>
+        </div>
 
-        {/* Menú de navegación */}
-        {!isMobile && (
-          <ul className="navbar-nav">
-            {menuItems.map((item) => (
-              <li key={item.path}>
-                <Link
-                  to={item.path}
-                  className={`navbar-link ${location.pathname === item.path ? 'active' : ''}`}
-                >
-                  {isTablet ? item.mobileIcon : item.label}
-                </Link>
-              </li>
+        {/* Enlaces de administrador */}
+        {user?.rol === 'Administrador' && (
+          <div className="navbar-mobile-section">
+            <h3>Administración</h3>
+            {adminItems.map((item) => (
+              <Link
+                key={item.path}
+                to={item.path}
+                className={`navbar-mobile-link ${location.pathname === item.path ? 'active' : ''}`}
+                onClick={closeMobileMenu}
+              >
+                <span className="navbar-mobile-icon">{item.mobileIcon}</span>
+                <span>{item.label}</span>
+              </Link>
             ))}
-            
-            {/* Menú de administrador */}
-            {user?.rol === 'Administrador' && (
-              <>
-                {adminItems.map((item) => (
-                  <li key={item.path}>
-                    <Link
-                      to={item.path}
-                      className={`navbar-link ${location.pathname === item.path ? 'active' : ''}`}
-                    >
-                      {isTablet ? item.mobileIcon : item.label}
-                    </Link>
-                  </li>
-                ))}
-              </>
-            )}
-          </ul>
+          </div>
         )}
 
         {/* Información del usuario */}
-        <div className="navbar-user">
-          {isMobile ? (
-            <div className="navbar-user-mobile">
-              <span className="navbar-user-name">
-                {user?.nombres?.split(' ')[0] || 'Usuario'}
-              </span>
-              <button
-                className="navbar-toggle"
-                onClick={toggleMobileMenu}
-                aria-label="Menú"
-              >
-                ☰
-              </button>
+        <div className="navbar-mobile-section">
+          <div className="navbar-mobile-user">
+            <div className="navbar-mobile-user-info">
+              <h4>{user?.nombres} {user?.apellidos}</h4>
+              <p>{user?.rol}</p>
             </div>
-          ) : (
-            <div className="navbar-user-info" style={{display:'flex',alignItems:'center',gap:'12px'}}>
-              <Link
-                to="/mi-perfil"
-                className="navbar-logout-icon"
-                title="Mi Perfil"
-                aria-label="Mi Perfil"
-                style={{textDecoration:'none',display:'flex',alignItems:'center',justifyContent:'center'}}
-              >
-                👤
-              </Link>
-              <button
-                className="navbar-logout-icon"
-                onClick={handleLogout}
-                title="Cerrar sesión"
-                aria-label="Cerrar sesión"
-              >
-                🔒
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Menú móvil */}
-      {isMobile && isMobileMenuOpen && (
-        <div className="navbar-mobile-menu">
-          <div className="navbar-mobile-content">
-            {/* Enlaces de navegación */}
-            <div className="navbar-mobile-section">
-              <h3>Navegación</h3>
-              {menuItems.map((item) => (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`navbar-mobile-link ${location.pathname === item.path ? 'active' : ''}`}
-                  onClick={closeMobileMenu}
-                >
-                  <span className="navbar-mobile-icon">{item.mobileIcon}</span>
-                  <span>{item.label}</span>
-                </Link>
-              ))}
-            </div>
-
-            {/* Enlaces de administrador */}
-            {user?.rol === 'Administrador' && (
-              <div className="navbar-mobile-section">
-                <h3>Administración</h3>
-                {adminItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className={`navbar-mobile-link ${location.pathname === item.path ? 'active' : ''}`}
-                    onClick={closeMobileMenu}
-                  >
-                    <span className="navbar-mobile-icon">{item.mobileIcon}</span>
-                    <span>{item.label}</span>
-                  </Link>
-                ))}
-              </div>
-            )}
-
-            {/* Información del usuario */}
-            <div className="navbar-mobile-section">
-              <div className="navbar-mobile-user">
-                <div className="navbar-mobile-user-info">
-                  <h4>{user?.nombres} {user?.apellidos}</h4>
-                  <p>{user?.rol}</p>
-                </div>
-                <button
-                  className="btn btn-danger btn-sm"
-                  onClick={handleLogout}
-                >
-                  Cerrar Sesión
-                </button>
-              </div>
-            </div>
+            <button
+              className="btn btn-danger btn-sm"
+              onClick={handleLogout}
+            >
+              Cerrar Sesión
+            </button>
           </div>
         </div>
-      )}
-    </nav>
+      </div>
+    </div>,
+    document.body
+  ) : null;
+
+  return (
+    <>
+      <nav className="navbar">
+        <div className="navbar-content">
+          {/* Logo y marca */}
+          <Link to="/dashboard" className="navbar-brand" onClick={closeMobileMenu}>
+            <div className="navbar-logo">
+              📊
+            </div>
+            <span className="navbar-brand-text">
+              {config?.nombre_sistema || 'Vanguard Estadísticas'}
+            </span>
+          </Link>
+
+          {/* Menú de navegación */}
+          {!isMobile && (
+            <ul className="navbar-nav">
+              {menuItems.map((item) => (
+                <li key={item.path}>
+                  <Link
+                    to={item.path}
+                    className={`navbar-link ${location.pathname === item.path ? 'active' : ''}`}
+                  >
+                    {isTablet ? item.mobileIcon : item.label}
+                  </Link>
+                </li>
+              ))}
+              
+              {/* Menú de administrador */}
+              {user?.rol === 'Administrador' && (
+                <>
+                  {adminItems.map((item) => (
+                    <li key={item.path}>
+                      <Link
+                        to={item.path}
+                        className={`navbar-link ${location.pathname === item.path ? 'active' : ''}`}
+                      >
+                        {isTablet ? item.mobileIcon : item.label}
+                      </Link>
+                    </li>
+                  ))}
+                </>
+              )}
+            </ul>
+          )}
+
+          {/* Información del usuario */}
+          <div className="navbar-user">
+            {isMobile ? (
+              <div className="navbar-user-mobile">
+                <span className="navbar-user-name">
+                  {user?.nombres?.split(' ')[0] || 'Usuario'}
+                </span>
+                <button
+                  className="navbar-toggle"
+                  onClick={toggleMobileMenu}
+                  aria-label="Menú"
+                >
+                  ☰
+                </button>
+              </div>
+            ) : (
+              <div className="navbar-user-info" style={{display:'flex',alignItems:'center',gap:'12px'}}>
+                <Link
+                  to="/mi-perfil"
+                  className="navbar-logout-icon"
+                  title="Mi Perfil"
+                  aria-label="Mi Perfil"
+                  style={{textDecoration:'none',display:'flex',alignItems:'center',justifyContent:'center'}}
+                >
+                  👤
+                </Link>
+                <button
+                  className="navbar-logout-icon"
+                  onClick={handleLogout}
+                  title="Cerrar sesión"
+                  aria-label="Cerrar sesión"
+                >
+                  🔒
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </nav>
+      
+      {/* Menú móvil renderizado como Portal (fuera del navbar) */}
+      {mobileMenuPortal}
+    </>
   );
 };
 

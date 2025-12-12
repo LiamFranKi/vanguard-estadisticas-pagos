@@ -8,6 +8,7 @@ import {
   alternarActivo,
   eliminarUsuario
 } from '../services/usuarios';
+import './Admin.css';
 
 const initialForm = {
   dni: '',
@@ -202,28 +203,29 @@ const Usuarios = () => {
   };
 
   return (
-    <div className="container" style={{ padding: '24px 0' }}>
-      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <div>
-          <h1 style={{ margin: 0 }}>👥 Usuarios</h1>
-          <p style={{ margin: 0, color: 'var(--text-secondary)' }}>Administra cuentas y roles del sistema</p>
-        </div>
+    <div className="admin-page">
+      <div className="page-header">
+        <h1 className="page-title">👥 Usuarios</h1>
+        <p className="page-subtitle">Administra cuentas y roles del sistema</p>
+      </div>
+      
+      <div className="page-actions">
         <button className="btn btn-primary" onClick={openCreate}>+ Nuevo Usuario</button>
       </div>
 
-      <form onSubmit={onSearch} style={{ display: 'flex', gap: 0, alignItems: 'center', marginBottom: 16 }}>
+      <form onSubmit={onSearch} className="search-bar">
         <input
-          className="form-input"
+          className="search-input"
           placeholder="Buscar por DNI, nombre, email..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          style={{ maxWidth: 420, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
         />
-        <button className="btn btn-primary" type="submit" style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, padding: '12px 18px' }}>🔎 Buscar</button>
+        <button className="btn btn-primary" type="submit">🔎 Buscar</button>
       </form>
 
-      <div className="table-responsive" style={{ background: '#fff', border: '1px solid var(--border-color)', borderRadius: 12 }}>
-        <table className="table" style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <div className="table-container">
+        <div className="table-wrapper">
+          <table className="responsive-table">
           <thead>
             <tr>
               <th style={{ padding: 12, textAlign: 'left' }}>DNI</th>
@@ -259,6 +261,7 @@ const Usuarios = () => {
             )}
           </tbody>
         </table>
+        </div>
       </div>
 
       <div className="pagination" style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 12 }}>

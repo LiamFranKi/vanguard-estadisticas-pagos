@@ -9,7 +9,7 @@
   padding: 16px 0;
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 100;
   transition: var(--transition);
 }
 
@@ -180,24 +180,39 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-  z-index: 2000;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 99999;
   animation: fadeIn 0.3s ease-out;
+  overflow: hidden;
 }
 
 .navbar-mobile-content {
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 0;
   width: 280px;
-  height: 100%;
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  border-left: 1px solid var(--glass-border);
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport height para móviles */
+  background: #ffffff;
+  border-left: 3px solid var(--primary-color);
+  box-shadow: -8px 0 30px rgba(0,0,0,0.3);
   padding: 20px;
   overflow-y: auto;
   animation: slideInRight 0.3s ease-out;
+  z-index: 100000;
+}
+
+/* Ajuste para móviles pequeños */
+@media (max-width: 480px) {
+  .navbar-mobile-content {
+    width: 85%;
+    max-width: 300px;
+  }
 }
 
 .navbar-mobile-section {
@@ -263,6 +278,12 @@
 
 /* Móviles pequeños (320px - 480px) */
 @media (max-width: 480px) {
+  /* Quitar completamente stacking context del navbar en móviles */
+  .navbar {
+    position: static !important;
+    z-index: auto !important;
+  }
+  
   .navbar-content {
     padding: 0 12px;
   }
@@ -298,6 +319,12 @@
 
 /* Móviles grandes (481px - 768px) */
 @media (min-width: 481px) and (max-width: 768px) {
+  /* Quitar completamente stacking context del navbar en móviles */
+  .navbar {
+    position: static !important;
+    z-index: auto !important;
+  }
+  
   .navbar-nav {
     display: none;
   }
@@ -444,9 +471,10 @@
     border-bottom-color: rgba(255, 255, 255, 0.1);
   }
   
+  /* Forzar fondo blanco en menú móvil siempre, incluso en dark mode */
   .navbar-mobile-content {
-    background: rgba(0, 0, 0, 0.3);
-    border-left-color: rgba(255, 255, 255, 0.1);
+    background: #ffffff !important;
+    border-left-color: var(--primary-color) !important;
   }
 }
 

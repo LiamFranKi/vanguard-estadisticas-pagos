@@ -3,180 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Presentación: Contaminación Ambiental</title>
+    <title>Encuesta para Padres de Familia</title>
+    <!-- 
+      AQUÍ SE CARGA EL "CSS" (Tailwind)
+      Esto le da todo el diseño profesional y responsivo.
+    -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Estilos Generales */
+        /* Usamos la fuente "Inter" que es limpia y moderna */
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f8ff; /* Azul claro suave */
-            color: #333;
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
         }
-        h1, h2, h3 {
-            color: #007bff; /* Azul brillante para títulos */
-        }
-        .slide {
-            min-height: 100vh;
-            padding: 40px 60px;
-            border-bottom: 5px solid #ccc;
-            background-color: white;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-        .header-slide {
-            background: linear-gradient(135deg, #007bff, #0056b3);
-            color: white;
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        .header-slide h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
-            color: white;
-        }
-        .content-flex {
-            display: flex;
-            gap: 30px;
-            align-items: center;
-            margin-top: 30px;
-        }
-        .content-flex > div {
-            flex: 1;
-        }
-        .content-flex img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        ul {
-            list-style: disc;
-            padding-left: 20px;
-        }
-        li {
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
-        .icon {
-            font-size: 1.5em;
-            margin-right: 10px;
-            color: #28a745; /* Verde para iconos */
+        /* Pequeña mejora para los botones de radio y checkboxes */
+        input[type="radio"], input[type="checkbox"] {
+            transform: scale(1.1);
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-100">
 
-<section id="diapo1" class="slide header-slide">
-    <h1>Contaminación Ambiental: ¡Cuidemos Nuestro Planeta!</h1>
-    <p>Una presentación para entender y actuar.</p>
-    
-</section>
+    <!-- ESTO ES EL "HTML" (La estructura) -->
+    <div class="container max-w-3xl mx-auto p-4 sm:p-8 my-10">
+        
+        <div class="bg-white p-6 sm:p-10 rounded-xl shadow-xl">
 
-<section id="diapo2" class="slide">
-    <h2>🌍 ¿Qué es la Contaminación Ambiental?</h2>
-    <div class="content-flex">
-        <div>
-            [cite_start]<p style="font-size: 1.2em;">Se define como la presencia en el ambiente de **cualquier agente** (físico, químico o biológico) que puede ser **nocivo** para la salud, la seguridad o el bienestar de la población[cite: 7].</p>
-            [cite_start]<p style="font-size: 1.2em;">También son perjudiciales para la vida vegetal o animal[cite: 7].</p>
-            [cite_start]<p>Afecta tanto a las grandes ciudades (con polución y $CO_{2}$), como al medio rural (por incendios y erupciones volcánicas)[cite: 2, 3, 5].</p>
-        </div>
-        <div>
-            
-        </div>
-    </div>
-</section>
+            <!-- 1. Encabezado -->
+            <header class="border-b border-gray-200 pb-6 mb-8">
+                <div class="flex items-center space-x-4">
+                    <!-- Puedes reemplazar esto con la URL del logo del colegio -->
+                    <img src="https://placehold.co/80x80/0d47a1/ffffff?text=LOGO" alt="Logo del Colegio" class="h-16 w-16 sm:h-20 sm:w-20 rounded-full object-cover">
+                    <div>
+                        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800">Encuesta para Padres de Familia</h1>
+                        <p class="text-gray-600 mt-1">Su opinión es fundamental para mejorar.</p>
+                    </div>
+                </div>
+            </header>
 
-<section id="diapo3" class="slide">
-    <h2>🛑 Causas de la Contaminación</h2>
-    <div class="content-flex">
-        <div>
-            <img src="causas_contaminacion.jpg" alt="Gráfico de Causas" style="width: 80%;">
+            <!-- 2. Formulario de Encuesta (HTML) -->
+            <form id="surveyForm">
+                
+                <!-- Sección 1: Información Básica -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Información del Estudiante</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="studentGrade" class="block text-sm font-medium text-gray-700 mb-1">Grado del estudiante:</label>
+                            <select id="studentGrade" name="studentGrade" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                <option value="" disabled selected>Seleccione un grado</option>
+                                <option value="inicial_3">Inicial (3 años)</option>
+                                <option value="inicial_4">Inicial (4 años)</option>
+                                <option value="inicial_5">Inicial (5 años)</option>
+                                <option value="primaria_1">1º Primaria</option>
+                                <option value="primaria_2">2º Primaria</option>
+                                <option value="primaria_3">3º Primaria</option>
+                                <option value="primaria_4">4º Primaria</option>
+                                <option value="primaria_5">5º Primaria</option>
+                                <option value="primaria_6">6º Primaria</option>
+                                <option value="secundaria_1">1º Secundaria</option>
+                                <option value="secundaria_2">2º Secundaria</option>
+                                <option value="secundaria_3">3º Secundaria</option>
+                                <option value="secundaria_4">4º Secundaria</option>
+                                <option value="secundaria_5">5º Secundaria</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="studentExperience" class="block text-sm font-medium text-gray-700 mb-1">¿Cuántos años lleva su hijo/a en el colegio?</label>
+                            <select id="studentExperience" name="studentExperience" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" required>
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                <option value="nuevo">Es su primer año</option>
+                                <option value="2-3">2 a 3 años</option>
+                                <option value="4-5">4 a 5 años</option>
+                                <option value="mas_5">Más de 5 años</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección 2: Calidad Académica -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Calidad Académica</h2>
+                    
+                    <label class="block text-sm font-medium text-gray-700 mb-2">¿Cómo calificaría el nivel de satisfacción con la calidad de la enseñanza?</label>
+                    <div class="space-y-2">
+                        <!-- Opciones de respuesta (Radio) -->
+                        <div class="flex items-center">
+                            <input id="calidad_5" name="calidadAcademica" type="radio" value="5" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500" required>
+                            <label for="calidad_5" class="ml-3 block text-sm text-gray-700">Muy Satisfecho</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="calidad_4" name="calidadAcademica" type="radio" value="4" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                            <label for="calidad_4" class="ml-3 block text-sm text-gray-700">Satisfecho</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="calidad_3" name="calidadAcademica" type="radio" value="3" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                            <label for="calidad_3" class="ml-3 block text-sm text-gray-700">Neutral</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="calidad_2" name="calidadAcademica" type="radio" value="2" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                            <label for="calidad_2" class="ml-3 block text-sm text-gray-700">Insatisfecho</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="calidad_1" name="calidadAcademica" type="radio" value="1" class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+                            <label for="calidad_1" class="ml-3 block text-sm text-gray-700">Muy Insatisfecho</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección 3: Comunicación -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Comunicación Colegio-Padres</h2>
+                    
+                    <label class="block text-sm font-medium text-gray-700 mb-2">¿Qué canales de comunicación utiliza MÁS FRECUENTEMENTE? (Marque todos los que apliquen)</label>
+                    <div class="space-y-2" id="canalesComunicacion">
+                        <!-- Opciones de respuesta (Checkbox) -->
+                        <div class="flex items-center">
+                            <input id="canal_email" name="canal_email" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                            <label for="canal_email" class="ml-3 block text-sm text-gray-700">Correo Electrónico</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="canal_plataforma" name="canal_plataforma" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                            <label for="canal_plataforma" class="ml-3 block text-sm text-gray-700">Plataforma/Intranet del Colegio</slabel>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="canal_whatsapp" name="canal_whatsapp" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                            <label for="canal_whatsapp" class="ml-3 block text-sm text-gray-700">Grupos de WhatsApp</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="canal_reuniones" name="canal_reuniones" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                            <label for="canal_reuniones" class="ml-3 block text-sm text-gray-700">Reuniones presenciales/virtuales</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input id="canal_web" name="canal_web" type="checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                            <label for="canal_web" class="ml-3 block text-sm text-gray-700">Página Web del Colegio</slabel>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sección 4: Comentarios Abiertos -->
+                <div class="mb-8">
+                    <h2 class="text-xl font-semibold text-gray-700 mb-4">Comentarios Adicionales</h2>
+                    
+                    <div>
+                        <label for="sugerencias" class="block text-sm font-medium text-gray-700 mb-1">¿Qué sugerencias tiene para mejorar el colegio?</label>
+                        <textarea id="sugerencias" name="sugerencias" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                    </div>
+
+                    <div class="mt-6">
+                        <label for="aspectos_positivos" class="block text-sm font-medium text-gray-700 mb-1">¿Qué aspectos positivos del colegio le gustaría destacar?</label>
+                        <textarea id="aspectos_positivos" name="aspectos_positivos" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                    </div>
+                </div>
+
+                <!-- Botón de Envío -->
+                <div class="mt-10 pt-6 border-t border-gray-200">
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors duration-300 text-lg">
+                        Enviar Encuesta
+                    </button>
+                </div>
+
+            </form>
+
+            <!-- 3. Mensaje de Éxito (Oculto por defecto) (HTML) -->
+            <div id="successMessage" class="hidden text-center p-8">
+                <div class="flex justify-center mb-4">
+                    <!-- Un ícono de check simple con SVG -->
+                    <svg class="h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-2">¡Encuesta Enviada!</h2>
+                <p class="text-gray-600 text-lg">Muchas gracias por su tiempo y sus valiosos comentarios. Su opinión nos ayuda a crecer.</p>
             </div>
-        <div>
-            <h3>Principales Fuentes:</h3>
-            <ul>
-                [cite_start]<li><span class="icon">🏭</span> **Desechos Sólidos:** Tanto domésticos (basura) como industriales[cite: 9, 10, 14].</li>
-                [cite_start]<li><span class="icon">🚗</span> **Transporte:** El monóxido de carbono de los vehículos[cite: 15].</li>
-                [cite_start]<li><span class="icon">🧪</span> **Químicos:** Exceso de fertilizantes y otros productos[cite: 11].</li>
-                [cite_start]<li><span class="icon">🪵</span> **Deforestación:** La tala y la quema de bosques[cite: 12, 13].</li>
-                [cite_start]<li><span class="icon">💧</span> **Aguas Residuales:** Desagües de aguas negras o contaminadas a ríos o al mar[cite: 16].</li>
-            </ul>
-        </div>
-    </div>
-</section>
-
-<section id="diapo4" class="slide">
-    <h2>💧🌱💨 Tipos de Contaminación Ambiental</h2>
-    <div class="content-flex">
-        <div>
-            <h3>A. Contaminación del Agua</h3>
-            [cite_start]<p>Se produce al incorporar materias extrañas como microorganismos, químicos o residuos industriales que la hacen inútil[cite: 19, 20].</p>
-            
-        </div>
-        <div>
-            <h3>B. Contaminación del Suelo</h3>
-            [cite_start]<p>Incorporación de basura, desechos tóxicos, pesticidas, que afectan plantas, animales y humanos al causar un desequilibrio químico y biológico[cite: 22, 23].</p>
-            
-        </div>
-        <div>
-            <h3>C. Contaminación del Aire</h3>
-            [cite_start]<p>Adición dañina de gases tóxicos ($CO$, $CO_{2}$) y polución a la atmósfera, afectando el desarrollo de la vida y la salud[cite: 3, 25].</p>
-            
-        </div>
-    </div>
-</section>
-
-<section id="diapo5" class="slide">
-    <h2>🔊☢️👁️ Otros Tipos Importantes</h2>
-    <div class="content-flex" style="flex-wrap: wrap;">
-        <div style="flex-basis: 30%;">
-            <h3 style="color: #6c757d;">D. Radiactiva</h3>
-            [cite_start]<p>Dispersión de materiales como el uranio, procedentes de instalaciones médicas o residuos nucleares[cite: 26, 27].</p>
-            
-        </div>
-        <div style="flex-basis: 30%;">
-            <h3 style="color: #6c757d;">E. Acústica (Ruido)</h3>
-            [cite_start]<p>Ruido de industrias y transporte que causa malestar, irritabilidad, insomnio y hasta sordera parcial[cite: 28, 29].</p>
-            
-        </div>
-        <div style="flex-basis: 30%;">
-            <h3 style="color: #6c757d;">F. Visual</h3>
-            [cite_start]<p>Deterioro de la estética del medio por paneles publicitarios, edificios e infraestructuras[cite: 30, 31].</p>
-            
-        </div>
-    </div>
-</section>
-
-<section id="diapo6" class="slide">
-    <h2>🔥💨💔 Consecuencias Devastadoras</h2>
-    <div class="content-flex">
-        <div>
-            <h3>Impacto Global y de Salud:</h3>
-            <ul>
-                [cite_start]<li><span class="icon">🌡️</span> **Cambio Climático:** Efecto invernadero y lluvia ácida[cite: 33].</li>
-                [cite_start]<li><span class="icon">🛡️</span> **Daños Ambientales:** Degradación de la biodiversidad, deforestación y daños en la capa de ozono[cite: 33].</li>
-                [cite_start]<li><span class="icon">🤧</span> **Salud Humana:** Problemas respiratorios como asma o alergias[cite: 33].</li>
-                [cite_start]<li><span class="icon">💀</span> **Vida Salvaje:** Propagación de enfermedades, muertes o desaparición de especies[cite: 33].</li>
-            </ul>
-        </div>
-        <div>
-            
-
-[Image of a diagram showing the Greenhouse Effect]
 
         </div>
     </div>
-</section>
 
-<section id="diapo7" class="slide header-slide">
-    <h2>¡Juntos podemos hacer la diferencia!</h2>
-    <p style="font-size: 1.5em; margin-top: 20px;">Cada acción cuenta para proteger nuestra salud y nuestro planeta.</p>
-    
-</section>
+    <!-- 
+      ESTO ES EL "JAVASCRIPT" (La interactividad)
+      Este código se ejecuta cuando el usuario presiona "Enviar".
+      Por ahora, solo oculta el formulario y muestra el mensaje de "Gracias".
+    -->
+    <script>
+        document.getElementById('surveyForm').addEventListener('submit', function(event) {
+            // Prevenimos que la página se recargue
+            event.preventDefault();
+
+            // Ocultamos el formulario
+            const form = document.getElementById('surveyForm');
+            form.style.display = 'none';
+
+            // Mostramos el mensaje de agradecimiento
+            const successMsg = document.getElementById('successMessage');
+            successMsg.classList.remove('hidden');
+
+            // Opcional: Llevamos al usuario al inicio de la página para ver el mensaje
+            window.scrollTo(0, 0);
+        });
+    </script>
 
 </body>
 </html>

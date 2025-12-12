@@ -314,7 +314,7 @@ const Dashboard = () => {
     loadStats();
   }, [añoActual]);
 
-  const mesesNombres = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const mesesNombres = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre'];
 
   // Handlers detalle ranking
   const handleClickAlumno = async (alumno) => {
@@ -580,15 +580,17 @@ const Dashboard = () => {
                 </div>
               </div>
               {rankingLoading ? <div style={{padding:'0.5rem'}}>Cargando...</div> : (
-                <table className="table">
-                  <thead><tr><th>DNI</th><th>Alumno</th><th>Grado</th><th style={{textAlign:'right'}}>Deuda Pendiente</th></tr></thead>
-                  <tbody>
-                    {ranking.topAlumnos.map(a => (
-                      <tr key={a.alumno_id} onClick={()=>handleClickAlumno(a)} style={{cursor:'pointer'}}><td>{a.dni}</td><td>{a.nombre}</td><td>{a.grado}</td><td style={{textAlign:'right'}}>S/ {(a.deuda_pendiente||0).toLocaleString()}</td></tr>
-                    ))}
-                    {!ranking.topAlumnos.length && <tr><td colSpan={4} style={{textAlign:'center',padding:'0.75rem'}}>Sin datos para el año seleccionado. Aún no hay deudores registrados.</td></tr>}
-                  </tbody>
-                </table>
+                <div className="table-wrapper">
+                  <table className="table">
+                    <thead><tr><th>DNI</th><th>Alumno</th><th>Grado</th><th style={{textAlign:'right'}}>Deuda Pendiente</th></tr></thead>
+                    <tbody>
+                      {ranking.topAlumnos.map(a => (
+                        <tr key={a.alumno_id} onClick={()=>handleClickAlumno(a)} style={{cursor:'pointer'}}><td>{a.dni}</td><td>{a.nombre}</td><td>{a.grado}</td><td style={{textAlign:'right'}}>S/ {(a.deuda_pendiente||0).toLocaleString()}</td></tr>
+                      ))}
+                      {!ranking.topAlumnos.length && <tr><td colSpan={4} style={{textAlign:'center',padding:'0.75rem'}}>Sin datos para el año seleccionado. Aún no hay deudores registrados.</td></tr>}
+                    </tbody>
+                  </table>
+                </div>
               )}
             </div>
             <div className="ranking-card">
@@ -600,15 +602,17 @@ const Dashboard = () => {
                 </div>
               </div>
               {rankingLoading ? <div style={{padding:'0.5rem'}}>Cargando...</div> : (
-                <table className="table">
-                  <thead><tr><th>Grado</th><th style={{textAlign:'right'}}>Deuda Total</th><th style={{textAlign:'right'}}>Pagado</th><th style={{textAlign:'right'}}>Saldo a Pagar</th></tr></thead>
-                  <tbody>
-                    {ranking.topGrados.map(g => (
-                      <tr key={g.grado_id} onClick={()=>handleClickGrado(g)} style={{cursor:'pointer'}}><td>{g.grado}</td><td style={{textAlign:'right'}}>S/ {(g.deuda_total||0).toLocaleString()}</td><td style={{textAlign:'right'}}>S/ {(g.total_pagado||0).toLocaleString()}</td><td style={{textAlign:'right'}}>S/ {(g.deuda_pendiente||0).toLocaleString()}</td></tr>
-                    ))}
-                    {!ranking.topGrados.length && <tr><td colSpan={4} style={{textAlign:'center',padding:'0.75rem'}}>Sin datos para el año seleccionado. Aún no hay deudas por grado.</td></tr>}
-                  </tbody>
-                </table>
+                <div className="table-wrapper">
+                  <table className="table">
+                    <thead><tr><th>Grado</th><th style={{textAlign:'right'}}>Deuda Total</th><th style={{textAlign:'right'}}>Pagado</th><th style={{textAlign:'right'}}>Saldo a Pagar</th></tr></thead>
+                    <tbody>
+                      {ranking.topGrados.map(g => (
+                        <tr key={g.grado_id} onClick={()=>handleClickGrado(g)} style={{cursor:'pointer'}}><td>{g.grado}</td><td style={{textAlign:'right'}}>S/ {(g.deuda_total||0).toLocaleString()}</td><td style={{textAlign:'right'}}>S/ {(g.total_pagado||0).toLocaleString()}</td><td style={{textAlign:'right'}}>S/ {(g.deuda_pendiente||0).toLocaleString()}</td></tr>
+                      ))}
+                      {!ranking.topGrados.length && <tr><td colSpan={4} style={{textAlign:'center',padding:'0.75rem'}}>Sin datos para el año seleccionado. Aún no hay deudas por grado.</td></tr>}
+                    </tbody>
+                  </table>
+                </div>
               )}
             </div>
           </div>
@@ -622,48 +626,50 @@ const Dashboard = () => {
             <button className="export-btn" onClick={exportarMesesPDF} disabled={mesesLoading || !mesesData.length}>PDF</button>
           </div>
           {mesesLoading ? <div style={{padding:'0.5rem'}}>Cargando...</div> : (
-            <table className="table">
-              <thead><tr><th>Concepto</th><th style={{textAlign:'right'}}>Pagado</th><th style={{textAlign:'right'}}>Deuda</th><th style={{textAlign:'right'}}>Total a Pagar</th></tr></thead>
-              <tbody>
-                {/* Fila Matrícula */}
-                <tr>
-                  <td>Matrícula</td>
-                  <td style={{textAlign:'right'}}>S/ {(matriculaData.pagado||0).toLocaleString()}</td>
-                  <td style={{textAlign:'right'}}>S/ {(matriculaData.deuda||0).toLocaleString()}</td>
-                  <td style={{textAlign:'right'}}>S/ {((Number(matriculaData.pagado||0)+Number(matriculaData.deuda||0))||0).toLocaleString()}</td>
-                </tr>
-                {/* Meses Mar-Dic */}
-                {mesesData.filter(m => (m?.mes||0) >= 3).map(m => (
-                  <tr key={m.mes}>
-                    <td>{mesesNombres[m.mes-1]}</td>
-                    <td style={{textAlign:'right'}}>S/ {(m.pagado||0).toLocaleString()}</td>
-                    <td style={{textAlign:'right'}}>S/ {(m.deuda||0).toLocaleString()}</td>
-                    <td style={{textAlign:'right'}}>S/ {((Number(m.pagado||0)+Number(m.deuda||0))||0).toLocaleString()}</td>
+            <div className="table-wrapper">
+              <table className="table">
+                <thead><tr><th>Concepto</th><th style={{textAlign:'right'}}>Pagado</th><th style={{textAlign:'right'}}>Deuda</th><th style={{textAlign:'right'}}>Total a Pagar</th></tr></thead>
+                <tbody>
+                  {/* Fila Matrícula */}
+                  <tr>
+                    <td>Matrícula</td>
+                    <td style={{textAlign:'right'}}>S/ {(matriculaData.pagado||0).toLocaleString()}</td>
+                    <td style={{textAlign:'right'}}>S/ {(matriculaData.deuda||0).toLocaleString()}</td>
+                    <td style={{textAlign:'right'}}>S/ {((Number(matriculaData.pagado||0)+Number(matriculaData.deuda||0))||0).toLocaleString()}</td>
                   </tr>
-                ))}
-                {/* Sin datos */}
-                {!mesesData.length && (
-                  <tr><td colSpan={4} style={{textAlign:'center',padding:'0.75rem'}}>Sin datos para el año seleccionado. Aún no hay estadísticas por mes.</td></tr>
-                )}
-                {/* Totales */}
-                {mesesData.length > 0 && (
-                  (()=>{
-                    const mesesFiltrados = (mesesData || []).filter(m => (m?.mes||0) >= 3);
-                    const totalPagado = (Number(matriculaData.pagado||0) + mesesFiltrados.reduce((a,b)=>a+Number(b.pagado||0),0));
-                    const totalDeuda = (Number(matriculaData.deuda||0) + mesesFiltrados.reduce((a,b)=>a+Number(b.deuda||0),0));
-                    const totalPagar = totalPagado + totalDeuda;
-                    return (
-                      <tr style={{fontWeight:700, background:'#f8fafc'}}>
-                        <td>Total</td>
-                        <td style={{textAlign:'right'}}>S/ {totalPagado.toLocaleString()}</td>
-                        <td style={{textAlign:'right'}}>S/ {totalDeuda.toLocaleString()}</td>
-                        <td style={{textAlign:'right'}}>S/ {totalPagar.toLocaleString()}</td>
-                      </tr>
-                    );
-                  })()
-                )}
-              </tbody>
-            </table>
+                  {/* Meses Mar-Dic */}
+                  {mesesData.filter(m => (m?.mes||0) >= 3).map(m => (
+                    <tr key={m.mes}>
+                      <td>{mesesNombres[m.mes-1]}</td>
+                      <td style={{textAlign:'right'}}>S/ {(m.pagado||0).toLocaleString()}</td>
+                      <td style={{textAlign:'right'}}>S/ {(m.deuda||0).toLocaleString()}</td>
+                      <td style={{textAlign:'right'}}>S/ {((Number(m.pagado||0)+Number(m.deuda||0))||0).toLocaleString()}</td>
+                    </tr>
+                  ))}
+                  {/* Sin datos */}
+                  {!mesesData.length && (
+                    <tr><td colSpan={4} style={{textAlign:'center',padding:'0.75rem'}}>Sin datos para el año seleccionado. Aún no hay estadísticas por mes.</td></tr>
+                  )}
+                  {/* Totales */}
+                  {mesesData.length > 0 && (
+                    (()=>{
+                      const mesesFiltrados = (mesesData || []).filter(m => (m?.mes||0) >= 3);
+                      const totalPagado = (Number(matriculaData.pagado||0) + mesesFiltrados.reduce((a,b)=>a+Number(b.pagado||0),0));
+                      const totalDeuda = (Number(matriculaData.deuda||0) + mesesFiltrados.reduce((a,b)=>a+Number(b.deuda||0),0));
+                      const totalPagar = totalPagado + totalDeuda;
+                      return (
+                        <tr style={{fontWeight:700, background:'#f8fafc'}}>
+                          <td>Total</td>
+                          <td style={{textAlign:'right'}}>S/ {totalPagado.toLocaleString()}</td>
+                          <td style={{textAlign:'right'}}>S/ {totalDeuda.toLocaleString()}</td>
+                          <td style={{textAlign:'right'}}>S/ {totalPagar.toLocaleString()}</td>
+                        </tr>
+                      );
+                    })()
+                  )}
+                </tbody>
+              </table>
+            </div>
           )}
         </div>
       </div>
@@ -804,37 +810,39 @@ const Dashboard = () => {
               </div>
             </div>
             {mesesLoading ? <div style={{padding:'0.75rem'}}>Cargando...</div> : (
-              <table className="table">
-                <thead><tr><th>Concepto</th><th style={{textAlign:'right'}}>Deuda Total</th><th style={{textAlign:'right'}}>Pagado</th><th style={{textAlign:'right'}}>Saldo a Pagar</th></tr></thead>
-                <tbody>
-                  <tr 
-                    onClick={() => abrirModalMes('Matrícula', 0)} 
-                    style={{cursor:'pointer'}}
-                    className="clickable-row"
-                  >
-                    <td>Matrícula</td>
-                    <td style={{textAlign:'right'}}>S/ {(matriculaData.deuda||0).toLocaleString()}</td>
-                    <td style={{textAlign:'right'}}>S/ {(matriculaData.pagado||0).toLocaleString()}</td>
-                    <td style={{textAlign:'right'}}>S/ {Math.max(Number(matriculaData.deuda||0)-Number(matriculaData.pagado||0),0).toLocaleString()}</td>
-                  </tr>
-                  {mesesData.map(m => (
+              <div className="table-wrapper">
+                <table className="table">
+                  <thead><tr><th>Concepto</th><th style={{textAlign:'right'}}>Deuda Total</th><th style={{textAlign:'right'}}>Pagado</th><th style={{textAlign:'right'}}>Saldo a Pagar</th></tr></thead>
+                  <tbody>
                     <tr 
-                      key={m.mes}
-                      onClick={() => abrirModalMes(mesesNombres[m.mes-1], m.mes)}
+                      onClick={() => abrirModalMes('Matrícula', 0)} 
                       style={{cursor:'pointer'}}
                       className="clickable-row"
                     >
-                      <td>{mesesNombres[m.mes-1]}</td>
-                      <td style={{textAlign:'right'}}>S/ {(m.deuda||0).toLocaleString()}</td>
-                      <td style={{textAlign:'right'}}>S/ {(m.pagado||0).toLocaleString()}</td>
-                      <td style={{textAlign:'right'}}>S/ {Math.max(Number(m.deuda||0)-Number(m.pagado||0),0).toLocaleString()}</td>
+                      <td>Matrícula</td>
+                      <td style={{textAlign:'right'}}>S/ {(matriculaData.deuda||0).toLocaleString()}</td>
+                      <td style={{textAlign:'right'}}>S/ {(matriculaData.pagado||0).toLocaleString()}</td>
+                      <td style={{textAlign:'right'}}>S/ {Math.max(Number(matriculaData.deuda||0)-Number(matriculaData.pagado||0),0).toLocaleString()}</td>
                     </tr>
-                  ))}
-                  {!mesesData.length && (
-                    <tr><td colSpan={4} style={{textAlign:'center',padding:'0.75rem'}}>Sin datos para el año seleccionado. Aún no hay estadísticas por mes.</td></tr>
-                  )}
-                </tbody>
-              </table>
+                    {mesesData.map(m => (
+                      <tr 
+                        key={m.mes}
+                        onClick={() => abrirModalMes(mesesNombres[m.mes-1], m.mes)}
+                        style={{cursor:'pointer'}}
+                        className="clickable-row"
+                      >
+                        <td>{mesesNombres[m.mes-1]}</td>
+                        <td style={{textAlign:'right'}}>S/ {(m.deuda||0).toLocaleString()}</td>
+                        <td style={{textAlign:'right'}}>S/ {(m.pagado||0).toLocaleString()}</td>
+                        <td style={{textAlign:'right'}}>S/ {Math.max(Number(m.deuda||0)-Number(m.pagado||0),0).toLocaleString()}</td>
+                      </tr>
+                    ))}
+                    {!mesesData.length && (
+                      <tr><td colSpan={4} style={{textAlign:'center',padding:'0.75rem'}}>Sin datos para el año seleccionado. Aún no hay estadísticas por mes.</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
           
@@ -957,20 +965,22 @@ const Dashboard = () => {
                 </div>
               </div>
               {rankingLoading ? <div style={{padding:'0.5rem'}}>Cargando...</div> : (
-                <table className="table">
-                  <thead><tr><th>DNI</th><th>Alumno</th><th>Grado</th><th style={{textAlign:'right'}}>Deuda Total</th></tr></thead>
-                  <tbody>
-                    {ranking.topAlumnos.slice(0,10).map(a => (
-                      <tr key={a.alumno_id} onClick={() => handleClickAlumno(a)}>
-                        <td>{a.dni}</td>
-                        <td>{a.nombre}</td>
-                        <td>{a.grado}</td>
-                        <td style={{textAlign:'right'}}>S/ {(a.deuda_pendiente||0).toLocaleString()}</td>
-                      </tr>
-                    ))}
-                    {!ranking.topAlumnos.length && <tr><td colSpan={4} style={{textAlign:'center',padding:'0.75rem'}}>Sin datos para el año seleccionado. Aún no hay deudores registrados.</td></tr>}
-                  </tbody>
-                </table>
+                <div className="table-wrapper">
+                  <table className="table">
+                    <thead><tr><th>DNI</th><th>Alumno</th><th>Grado</th><th style={{textAlign:'right'}}>Deuda Total</th></tr></thead>
+                    <tbody>
+                      {ranking.topAlumnos.slice(0,10).map(a => (
+                        <tr key={a.alumno_id} onClick={() => handleClickAlumno(a)}>
+                          <td>{a.dni}</td>
+                          <td>{a.nombre}</td>
+                          <td>{a.grado}</td>
+                          <td style={{textAlign:'right'}}>S/ {(a.deuda_pendiente||0).toLocaleString()}</td>
+                        </tr>
+                      ))}
+                      {!ranking.topAlumnos.length && <tr><td colSpan={4} style={{textAlign:'center',padding:'0.75rem'}}>Sin datos para el año seleccionado. Aún no hay deudores registrados.</td></tr>}
+                    </tbody>
+                  </table>
+                </div>
               )}
             </div>
             <div className="ranking-card">
@@ -982,20 +992,22 @@ const Dashboard = () => {
                 </div>
               </div>
               {rankingLoading ? <div style={{padding:'0.5rem'}}>Cargando...</div> : (
-                <table className="table">
-                  <thead><tr><th>Grado</th><th style={{textAlign:'right'}}>Deuda Total</th><th style={{textAlign:'right'}}>Pagado</th><th style={{textAlign:'right'}}>Saldo a Pagar</th></tr></thead>
-                  <tbody>
-                    {ranking.topGrados.map(g => (
-                      <tr key={g.grado_id} onClick={() => handleClickGrado(g)} style={{cursor:'pointer'}}>
-                        <td>{g.grado}</td>
-                        <td style={{textAlign:'right'}}>S/ {(g.deuda_total||0).toLocaleString()}</td>
-                        <td style={{textAlign:'right'}}>S/ {(g.total_pagado||0).toLocaleString()}</td>
-                        <td style={{textAlign:'right'}}>S/ {(g.deuda_pendiente||0).toLocaleString()}</td>
-                      </tr>
-                    ))}
-                    {!ranking.topGrados.length && <tr><td colSpan={4} style={{textAlign:'center',padding:'0.75rem'}}>Sin datos para el año seleccionado. Aún no hay deudas por grado.</td></tr>}
-                  </tbody>
-                </table>
+                <div className="table-wrapper">
+                  <table className="table">
+                    <thead><tr><th>Grado</th><th style={{textAlign:'right'}}>Deuda Total</th><th style={{textAlign:'right'}}>Pagado</th><th style={{textAlign:'right'}}>Saldo a Pagar</th></tr></thead>
+                    <tbody>
+                      {ranking.topGrados.map(g => (
+                        <tr key={g.grado_id} onClick={() => handleClickGrado(g)} style={{cursor:'pointer'}}>
+                          <td>{g.grado}</td>
+                          <td style={{textAlign:'right'}}>S/ {(g.deuda_total||0).toLocaleString()}</td>
+                          <td style={{textAlign:'right'}}>S/ {(g.total_pagado||0).toLocaleString()}</td>
+                          <td style={{textAlign:'right'}}>S/ {(g.deuda_pendiente||0).toLocaleString()}</td>
+                        </tr>
+                      ))}
+                      {!ranking.topGrados.length && <tr><td colSpan={4} style={{textAlign:'center',padding:'0.75rem'}}>Sin datos para el año seleccionado. Aún no hay deudas por grado.</td></tr>}
+                    </tbody>
+                  </table>
+                </div>
               )}
             </div>
           </div>
@@ -1202,8 +1214,8 @@ const Dashboard = () => {
 
         {/* Modal 3: Alumnos Deudores por Aula y Mes */}
         {modalAlumnosOpen && (
-          <div className="modal-backdrop" onClick={() => setModalAlumnosOpen(false)} style={{zIndex:1100}}>
-            <div className="modal" onClick={(e) => e.stopPropagation()} style={{maxWidth:'800px',zIndex:1101}}>
+          <div className="modal-backdrop" onClick={() => setModalAlumnosOpen(false)} style={{zIndex:10100}}>
+            <div className="modal" onClick={(e) => e.stopPropagation()} style={{maxWidth:'800px',zIndex:10101}}>
               <div className="modal-header">
                 <h3>Alumnos Deudores - {aulaSeleccionada?.grado} - {mesSeleccionado?.nombre}</h3>
                 <button className="close-btn" onClick={() => setModalAlumnosOpen(false)}>✖</button>

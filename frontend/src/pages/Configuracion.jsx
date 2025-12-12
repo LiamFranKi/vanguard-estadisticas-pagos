@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useConfig } from '../contexts/ConfigContext';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import './Admin.css';
 
 const Configuracion = () => {
   const { config, fetchConfig } = useConfig();
@@ -69,13 +70,11 @@ const Configuracion = () => {
   };
 
   return (
-    <div className="container" style={{ padding: '24px', maxWidth: '1000px', margin: '0 auto' }}>
-      <h1 style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <span>⚙️</span> Configuración del Sistema
-      </h1>
-      <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
-        Personaliza el nombre, colores, logo y datos de contacto del sistema
-      </p>
+    <div className="admin-page" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+      <div className="page-header">
+        <h1 className="page-title">⚙️ Configuración del Sistema</h1>
+        <p className="page-subtitle">Personaliza el nombre, colores, logo y datos de contacto del sistema</p>
+      </div>
 
       <form onSubmit={handleSubmit}>
         <div style={{ display: 'grid', gap: '24px' }}>
@@ -146,7 +145,7 @@ const Configuracion = () => {
             <h2 style={{ marginBottom: '20px', fontSize: '1.3rem', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '8px' }}>
               🎨 Colores del Sistema
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+            <div className="form-grid">
               <div className="form-group">
                 <label className="form-label">Color Primario</label>
                 <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>

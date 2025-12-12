@@ -654,5 +654,238 @@ Para dudas o soporte técnico, contactar al administrador del sistema.
 
 ---
 
-**¡Sistema listo para producción!** 🚀
+## 🚀 DEPLOYMENT Y PRODUCCIÓN - v1.1.0
+
+### **Fecha de Deployment: 6 de Noviembre, 2025**
+
+#### **Infraestructura**
+- ✅ **Servidor**: Hostinger VPS (Ubuntu)
+  - IP: 72.60.172.101
+  - Hostname: srv1063042.hstgr.cloud
+- ✅ **Dominio**: https://estadisticas.vanguardschools.com
+- ✅ **SSL/HTTPS**: Let's Encrypt (renovación automática)
+- ✅ **Servidor Web**: Nginx 1.18.0
+- ✅ **Node.js**: v20.19.5
+- ✅ **PostgreSQL**: v14.19
+- ✅ **Gestión de Procesos**: PM2 v6.0.13
+
+#### **Configuración de Puertos**
+- Backend API: Puerto 5001 (interno)
+- Frontend: Servido por Nginx en puerto 80/443 (público)
+- Base de Datos: Puerto 5432 (PostgreSQL)
+
+#### **Base de Datos**
+- ✅ Base de datos importada completa desde backup de desarrollo
+- ✅ Usuario: `estadisticas_user` con permisos completos
+- ✅ 11 tablas principales + 4 vistas
+- ✅ Datos iniciales: 1013 alumnos, 11126 deudas, 9873 pagos
+- ✅ Triggers y foreign keys configurados
+
+#### **Correcciones de Deployment**
+
+**Backend:**
+- ✅ Corregido `server.js` para cargar `.env` correctamente
+- ✅ Configurado `trust proxy` para compatibilidad con Nginx
+- ✅ Rate limiter ajustado a 1000 requests/15min (producción)
+- ✅ Hash de contraseña regenerado con bcrypt
+- ✅ Permisos de base de datos otorgados correctamente
+- ✅ Directorio `uploads/` con permisos `www-data`
+
+**Frontend:**
+- ✅ Build optimizado con Vite
+- ✅ Variables de entorno configuradas para producción
+- ✅ Archivos estáticos servidos por Nginx
+
+**Nginx:**
+- ✅ Proxy reverso a backend (puerto 5001)
+- ✅ Servicio de archivos estáticos
+- ✅ Ruta `/uploads/` para archivos subidos
+- ✅ Cache configurado para assets
+- ✅ Límite de upload: 50MB
+
+**PM2:**
+- ✅ Backend gestionado con PM2
+- ✅ Logs configurados en `/var/log/pm2/`
+- ✅ Reinicio automático en caso de fallo
+- ✅ Inicio automático al boot del servidor
+
+---
+
+## 📱 RESPONSIVE DESIGN - v1.1.0
+
+### **Optimizaciones Móviles y Tablets**
+
+#### **Corrección de "Setiembre" vs "Septiembre"**
+- ✅ Frontend: Cambiado array `mesesNombres` de `'Septiembre'` a `'Setiembre'`
+- ✅ Backend: Corregido 2 arrays en `estadisticas.routes.js`:
+  - Endpoint `/saldo-por-grado`
+  - Endpoint `/alumnos-deudores-mes`
+- ✅ Estadísticas de septiembre ahora funcionan en todos los modales
+
+#### **Dashboard Móvil**
+- ✅ Modales redimensionados: 95vw (antes 900px fijos)
+- ✅ Altura máxima: 85vh (cabe en pantalla)
+- ✅ Tablas con scroll horizontal táctil
+- ✅ Gráficos ajustados: 280px en móviles
+- ✅ Textos y botones más compactos
+- ✅ Headers sticky en tablas de modales
+- ✅ Botones centrados en modales
+- ✅ Footer de modales con wrap responsive
+
+#### **Menú Móvil**
+- ✅ Portal de React: Menú renderizado fuera del navbar
+- ✅ Z-index corregido: 99999 (encima de todo)
+- ✅ Fondo sólido blanco (compatible con dark mode)
+- ✅ Backdrop más oscuro: 75% opacidad
+- ✅ Blur mejorado para Chrome y Safari
+- ✅ Navbar sin stacking context en móviles
+- ✅ "Mi Perfil" agregado al menú móvil
+
+#### **Jerarquía de Z-Index**
+- Navbar: 100 (desktop) / auto (móvil)
+- Modales nivel 1-2: 9999-10000
+- Tercer modal (alumnos): 10100-10101
+- Menú móvil: 99999 (arriba de todo)
+
+#### **Páginas Administrativas Responsive**
+- ✅ Creado `Admin.css` con estilos compartidos
+- ✅ **Archivos.jsx**: Clases responsive aplicadas
+  - Upload sections adaptables
+  - Tabla con scroll horizontal
+  - Botones full-width en móvil
+- ✅ **Usuarios.jsx**: Clases responsive aplicadas
+  - Search bar responsive
+  - Tabla con scroll horizontal
+  - Acciones adaptables
+- ✅ **Configuracion.jsx**: Clases responsive aplicadas
+  - Form grid adaptable
+  - Color pickers ajustados
+  - Secciones en columna única
+
+#### **Tablas Responsive**
+- ✅ Ancho mínimo 600px (móvil) / 700px (desktop)
+- ✅ Scroll horizontal táctil
+- ✅ Font-size ajustado: 0.85rem (móvil)
+- ✅ Padding reducido en celdas
+- ✅ Wrapper con `-webkit-overflow-scrolling: touch`
+
+---
+
+## 🐛 CORRECCIONES Y MEJORAS
+
+### **Errores Críticos Resueltos en Deployment**
+
+1. **Error de Permisos PostgreSQL**
+   - Problema: Usuario `estadisticas_user` sin permisos en tablas
+   - Solución: `GRANT ALL PRIVILEGES ON ALL TABLES/SEQUENCES`
+
+2. **Error 429 (Too Many Requests)**
+   - Problema: Rate limiter muy restrictivo (100 requests/15min)
+   - Solución: Aumentado a 1000 requests/15min
+
+3. **Error 401 (Login)**
+   - Problema: Hash de contraseña incorrecto (29 chars en lugar de 60)
+   - Solución: Regenerado hash con bcrypt correcto
+
+4. **Columna Faltante**
+   - Problema: `fecha_reporte` no existía en tabla `deudas`
+   - Solución: `ALTER TABLE deudas ADD COLUMN fecha_reporte DATE`
+
+5. **Vistas Faltantes**
+   - Problema: Script SQL incompleto
+   - Solución: Importado backup completo desde pgAdmin4
+
+6. **Problema de Setiembre**
+   - Problema: Backend buscaba `'septiembre'` (con P), datos tenían `'setiembre'` (sin P)
+   - Solución: Corregido en 2 endpoints del backend
+
+7. **Tercer Modal Detrás del Segundo**
+   - Problema: Z-index 1100 muy bajo
+   - Solución: Aumentado a 10100-10101
+
+8. **Menú Móvil Contenido**
+   - Problema: Menú dentro de navbar con stacking context
+   - Solución: Portal de React + position fixed
+
+---
+
+## 📦 ARCHIVOS CLAVE DEL SISTEMA
+
+### **Configuración**
+- `backend/.env` - Variables de entorno de producción
+- `frontend/.env` - URLs del backend en producción
+- `backend/ecosystem.config.js` - Configuración PM2
+- `/etc/nginx/sites-available/estadisticas` - Config de Nginx
+
+### **Base de Datos**
+- `database/estadisticas_pagos_completo.sql` - Backup completo (2.6MB)
+- `database/schema_completo.sql` - Schema básico
+- 11 tablas + 4 vistas + triggers + índices
+
+### **Documentación**
+- `DEPLOYMENT_HOSTINGER_VPS.md` - Guía completa de deployment
+- `CHANGELOG.md` - Registro de funcionalidades y cambios
+- `SETUP_DATABASE.md` - Instrucciones de base de datos
+- `README.md` - Descripción general del proyecto
+
+---
+
+## 🔄 PROCESO DE ACTUALIZACIÓN
+
+### **Actualizar el Sistema en Producción**
+
+1. **Subir archivos** vía WinSCP o Git
+2. **Backend**:
+   ```bash
+   cd /var/www/estadisticas/backend
+   npm install
+   pm2 restart estadisticas-backend
+   ```
+3. **Frontend**:
+   ```bash
+   cd /var/www/estadisticas/frontend
+   npm install
+   npm run build
+   ```
+4. **Nginx** (solo si cambió config):
+   ```bash
+   sudo nginx -t
+   sudo systemctl reload nginx
+   ```
+
+---
+
+## 📊 ESTADÍSTICAS DEL PROYECTO
+
+### **Líneas de Código**
+- Frontend: ~5,500 líneas (React + JSX + CSS)
+- Backend: ~2,800 líneas (Node.js + Express)
+- Database: ~400 líneas SQL
+- **Total**: ~8,700 líneas de código
+
+### **Tecnologías**
+- **Frontend**: React 18, Vite 5, Chart.js 4, Axios, React Router DOM 6, SweetAlert2, Moment.js
+- **Backend**: Express 4, PostgreSQL (pg), bcryptjs, JWT, Multer, XLSX, PDF-parse
+- **DevOps**: Nginx, PM2, Let's Encrypt, Git
+
+### **Funcionalidades**
+- 7 páginas principales
+- 15+ modales interactivos
+- 10+ endpoints de API
+- 11 tablas de base de datos
+- 4 vistas SQL
+- Exportación Excel y PDF
+- Subida de archivos (Excel/PDF)
+- Autenticación JWT
+- Gestión de usuarios y roles
+- Configuración dinámica del sistema
+- Estadísticas multi-año
+
+---
+
+**¡Sistema desplegado y funcionando en producción!** 🎉
+
+**URL**: https://estadisticas.vanguardschools.com
+
+---
 
